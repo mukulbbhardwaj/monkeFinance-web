@@ -1,0 +1,28 @@
+
+
+:root{
+  --main-bg-color:hsl(240, 7%, 11%);
+  --text-color:#DFDFD6;
+  --sub-heading-color:#9A9A9A;
+  --heading-color:#D9D9D9;
+  --green-color:#00E376;
+  --red-color:#EE0C0C;
+  --secondary-bg-color:#202126;
+}
+
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+
+
+body{
+background-color: var(--main-bg-color);
+color: var(--text-color);
+}
+
+
+
