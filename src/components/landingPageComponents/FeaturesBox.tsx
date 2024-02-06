@@ -1,11 +1,13 @@
-import { FC } from 'react'
+import { FC } from "react";
 
-interface FeaturesBoxProps {
-  
-}
+interface FeaturesBoxProps {}
 
 const FeaturesBox: FC<FeaturesBoxProps> = () => {
-  return <div>featuresBox</div>
-}
+  return (
+    <div className="">
+     
+    </div>
+  );
+};
 
-export default FeaturesBox
+export default FeaturesBox;

@@ -14,12 +14,12 @@ const InputComponent: FC<InputComponentProps> = ({
   placeholder,
 }) => {
   return (
-    <div className="flex flex-col p-6 w-full">
-      <h1 className="text-text pb-4 text-sm">{inputLabel}</h1>
+    <div className="flex flex-col w-full">
+      <h1 className="pb-4 text-sm">{inputLabel}</h1>
       <input
         placeholder={placeholder}
         type={inputType}
-        className="bg-transparent border-b border-text text-base"
+        className="border bg-transparent outline-none p-2 text-base "
         onChange={onChange}
       />
     </div>

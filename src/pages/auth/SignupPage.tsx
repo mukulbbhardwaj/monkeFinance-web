@@ -2,14 +2,14 @@ import { ChangeEvent, FC, useState } from "react";
 import MainLogo from "../../components/miscComponents/MainLogo";
 import InputComponent from "../../components/miscComponents/InputComponent";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 
 interface SignupPageProps {}
 
 const SignupPage: FC<SignupPageProps> = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [emailId, setEmailId] = useState("");
+  const [email, setEmail] = useState("");
   const handleUsername = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
     console.log("username", username);
@@ -21,18 +21,26 @@ const SignupPage: FC<SignupPageProps> = () => {
   };
 
   const handleEmailId = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmailId(event.target.value);
-    console.log("password", emailId);
+    setEmail(event.target.value);
+    console.log("password", email);
   };
-  const signupButtonHandler = () => {
-    console.log("click");
-  
+  const signupButtonHandler = async () => {
+    try {
+      const res = await axios.post("http://localhost:3000/api/user/register", {
+        username,
+        password,
+        email,
+      });
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center gap-32">
       <MainLogo />
-      <div className="bg-secondary-bg rounded-3xl flex justify-center items-center flex-col w-96 p-8 ">
+      <div className="flex justify-center items-center flex-col gap-4 ">
         <InputComponent
           inputLabel="Email Id"
           inputType="email"
@@ -51,15 +59,8 @@ const SignupPage: FC<SignupPageProps> = () => {
           onChange={handlePassword}
           placeholder="********"
         />
-        {/* <InputComponent
-          inputLabel="Confirm Password"
-          inputType="password"
-          onChange={handleConfirmPassword}
-          placeholder="********"
-        /> */}
-
         <button
-          className="bg-cyan-200 text-black text-center border-red p-4 rounded-xl w-4/5 m-4 "
+          className="bg-[#B6CCD7] text-black text-sm text-center p-2 rounded w-4/5 "
           onClick={signupButtonHandler}
         >
           SignUp

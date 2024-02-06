@@ -1,3 +1,4 @@
+import Layout from '@/Layout'
 import { FC } from 'react'
 
 interface LearnSectionPageProps {
@@ -5,7 +6,11 @@ interface LearnSectionPageProps {
 }
 
 const LearnSectionPage: FC<LearnSectionPageProps> = () => {
-  return <div>learnSectionPage</div>
+  return <div>
+    <Layout>
+      Mukul
+    </Layout>
+  </div>
 }
 
 export default LearnSectionPage

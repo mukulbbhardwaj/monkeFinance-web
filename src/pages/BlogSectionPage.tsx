@@ -1,11 +1,14 @@
-import { FC } from 'react'
+import { FC } from "react";
+import Layout from "../Layout";
 
-interface BlogSectionPageProps {
-  
-}
+interface BlogSectionPageProps {}
 
 const BlogSectionPage: FC<BlogSectionPageProps> = () => {
-  return <div>blogSectionPage</div>
-}
+  return (
+    <div>
+      <Layout> Blogs Here</Layout>
+    </div>
+  );
+};
 
-export default BlogSectionPage
+export default BlogSectionPage;

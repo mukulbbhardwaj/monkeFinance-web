@@ -1,16 +1,18 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+
 // import App from './App.tsx'
 import "./App.css";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import LandingPage from "./pages/LandingPage.tsx";
+// import LandingPage from "./pages/LandingPage.tsx";
 
 import BlogSectionPage from "./pages/BlogSectionPage.tsx";
 import LearnSectionPage from "./pages/LearnSectionPage.tsx";
-import AccountPage from "./pages/AccountPage.tsx";
 import LoginPage from "./pages/auth/LoginPage.tsx";
 import SignupPage from "./pages/auth/SignupPage.tsx";
+import DashboardPage from "./pages/DashboardPage.tsx";
+import LandingPage from "./pages/LandingPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -18,12 +20,16 @@ const router = createBrowserRouter([
     element: <LandingPage />,
   },
   {
+    path: `/dashboard/:id`,
+    element: <DashboardPage/>,
+  },
+  {
     path: "/login",
     element: <LoginPage />,
   },
   {
     path: "/signup",
-    element:<SignupPage/>,
+    element: <SignupPage />,
   },
   {
     path: "/learn",
@@ -32,15 +38,14 @@ const router = createBrowserRouter([
   {
     path: "/blogs",
     element: <BlogSectionPage />,
-  },
-  {
-    path: "/account/:userId",
-    element: <AccountPage />,
-  },
+  }
+  
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
+    <div className="">
     <RouterProvider router={router} />
+    </div>
   </React.StrictMode>
 );

@@ -1,11 +1,14 @@
-import { FC } from 'react'
+import { FC } from "react";
+import Layout from "../Layout";
 
-interface FullPortfolioPageProps {
-  
-}
+interface FullPortfolioPageProps {}
 
 const FullPortfolioPage: FC<FullPortfolioPageProps> = () => {
-  return <div>fullPortfolioPage</div>
-}
+  return (
+    <div>
+      <Layout>fullPortfolioPage</Layout>
+    </div>
+  );
+};
 
-export default FullPortfolioPage
+export default FullPortfolioPage;
