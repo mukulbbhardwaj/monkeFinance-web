@@ -16,13 +16,12 @@ export function cn(...inputs: ClassValue[]) {
 //
 //
 export const formatPrice = (
-  num: number | string | undefined,
+  num: number,
   isCurrency: boolean = false
 ): string => {
   if (num === undefined || isNaN(Number(num))) {
     return "N/A";
   }
-
   const numericValue: number =
     typeof num === "string" ? parseFloat(num) : Number(num);
 

@@ -16,7 +16,7 @@ const LatestNewsSection = () => {
     const fetchData = async () => {
       try {
         const res = await getNews();
-        const data = (await res.data) || [];
+        const data = (await res.data);
         setNewsData(data);
         console.log(data);
       } catch (error) {

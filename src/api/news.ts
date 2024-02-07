@@ -1,11 +1,8 @@
 // api/news.ts
 
-interface NewsItem {
-  title: string;
-  description: string;
-}
 
-const getNews = async (): Promise<NewsItem[]> => {
+
+const getNews = async () => {
   const apiUrl = import.meta.env.VITE_NEWS_API_URL;
   const localStorageKey = "newsData";
   try {
@@ -33,7 +30,7 @@ const getNews = async (): Promise<NewsItem[]> => {
     if (!response.ok) {
       throw new Error(`Error fetching news data: ${response.status}`);
     }
-    return data as NewsItem[];
+    return data;
   } catch (error) {
     console.error("API Error:", error);
     return [];
