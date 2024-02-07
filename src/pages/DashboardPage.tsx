@@ -35,7 +35,7 @@ const DashboardPage: FC<DashboardPageProps> = () => {
     if (userdata.user) {
       fetchPortfolioData();
     }
-  }, [userdata.user]);
+  }, [portfolioInfo, userdata.user]);
 
   return (
     <>
