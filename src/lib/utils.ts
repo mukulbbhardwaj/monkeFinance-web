@@ -16,11 +16,11 @@ export function cn(...inputs: ClassValue[]) {
 //
 //
 export const formatPrice = (
-  num: number | string | undefined,
+  num: number,
   isCurrency: boolean = false
-): string => {
+): number => {
   if (num === undefined || isNaN(Number(num))) {
-    return "N/A";
+    return NaN;
   }
 
   const numericValue: number =
@@ -28,22 +28,23 @@ export const formatPrice = (
 
   if (!isNaN(numericValue)) {
     if (isCurrency) {
-      return numericValue.toFixed(2);
+      return parseFloat(numericValue.toFixed(2));
     } else {
       if (numericValue >= 1000000000) {
-        return (numericValue / 1000000000).toFixed(2) + "B";
+        return parseFloat((numericValue / 1000000000).toFixed(2));
       } else if (numericValue >= 1000000) {
-        return (numericValue / 1000000).toFixed(2) + "M";
+        return parseFloat((numericValue / 1000000).toFixed(2));
       } else if (numericValue >= 1000) {
-        return (numericValue / 1000).toFixed(2) + "K";
+        return parseFloat((numericValue / 1000).toFixed(2));
       } else {
-        return numericValue.toFixed(2);
+        return parseFloat(numericValue.toFixed(2));
       }
     }
   }
 
-  return "N/A";
+  return NaN;
 };
+
 
 //
 //
@@ -53,7 +54,7 @@ export const calculateReturns = (
   avgBuyPrice: number,
   currentPrice: number,
   quantity: number
-): number | undefined => {
+): number => {
 
 
   const totalInvestment = avgBuyPrice * quantity;

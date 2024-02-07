@@ -14,7 +14,7 @@ const HoldingsItem: FC<SymbolInfoProps> = ({
   avgBuyPrice,
   quantity,
 }) => {
-  const [currentPrice, setCurrentPrice] = useState<number>();
+  const [currentPrice, setCurrentPrice] = useState<number>(0);
 
   useEffect(() => {
     const ws = subscribeToSymbol(symbolName, (data) => {
