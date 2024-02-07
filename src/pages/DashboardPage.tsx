@@ -5,8 +5,6 @@ import SymbolInfo from "@/components/dashboardComponents/HoldingsItem";
 import useStore from "@/store/userStore";
 import SymbolSearch from "@/components/dashboardComponents/SymbolSearch";
 import getPortfolioInfo from "@/api/getPortfolioInfo";
-// import { subscribeToSymbol } from "@/api/binance";
-// import { calculateReturns } from "@/lib/utils";
 
 interface DashboardPageProps {}
 
@@ -39,31 +37,17 @@ const DashboardPage: FC<DashboardPageProps> = () => {
     }
   }, [userdata.user]);
 
-
-  const [loading, setLoading] = useState(true);
-   useEffect(() => {
-     const timer = setTimeout(() => {
-       setLoading(false);
-     }, 5000);
-
-     return () => clearTimeout(timer); // Cleanup the timer on component unmount
-   }, []);
-
   return (
     <>
       <Layout>
         <div className="flex flex-col mt-8 lg:flex-row  lg:justify-around lg:align-top lg:items-start ">
           <div className="">
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              <PortfolioQuickView
-                investedAmount={portfolioInfo?.totalAmount || 0}
-                currentAmount={12400}
-                totalAmount={portfolioInfo?.totalAmount || 0}
-                symbols={portfolioInfo?.symbolsOwned || []}
-              />
-            )}
+            <PortfolioQuickView
+              investedAmount={portfolioInfo?.totalAmount || 0}
+              currentAmount={12400}
+              totalAmount={portfolioInfo?.totalAmount || 0}
+              symbols={portfolioInfo?.symbolsOwned || []}
+            />
             <SymbolSearch />
           </div>
           <div className="lg:w-96 lg:ml-8 ">
