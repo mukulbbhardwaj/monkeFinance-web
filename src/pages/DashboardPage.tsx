@@ -26,9 +26,7 @@ type PortfolioData = {
 
 const DashboardPage: FC<DashboardPageProps> = () => {
   const userdata = useStore();
-  const [portfolioInfo, setPortfolioInfo] = useState<PortfolioData | null>(
-    null
-  );
+  const [portfolioInfo, setPortfolioInfo] = useState<PortfolioData>();
 
   useEffect(() => {
     const fetchPortfolioData = async () => {
@@ -47,9 +45,9 @@ const DashboardPage: FC<DashboardPageProps> = () => {
         <div className="flex flex-col mt-8 lg:flex-row  lg:justify-around lg:align-top lg:items-start ">
           <div className="">
             <PortfolioQuickView
-              investedAmount={portfolioInfo?.totalAmount}
+              investedAmount={portfolioInfo!.totalAmount}
               currentAmount={12400}
-              totalAmount={portfolioInfo?.totalAmount}
+              totalAmount={portfolioInfo!.totalAmount}
               symbols={portfolioInfo?.symbolsOwned}
             />
             <SymbolSearch />
