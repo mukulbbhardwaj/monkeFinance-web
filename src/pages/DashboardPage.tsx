@@ -30,12 +30,11 @@ const DashboardPage: FC<DashboardPageProps> = () => {
     const fetchPortfolioData = async () => {
       const data: PortfolioData = await getPortfolioInfo(userdata.user?.id);
       setPortfolioInfo(data);
-      console.log(portfolioInfo);
     };
     if (userdata.user) {
       fetchPortfolioData();
     }
-  }, [portfolioInfo, userdata.user]);
+  }, [userdata.user]);
 
   return (
     <>
