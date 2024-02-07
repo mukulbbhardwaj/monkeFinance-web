@@ -11,21 +11,17 @@ interface SymbolOwned {
 }
 
 interface PortfolioQuickViewProps {
-  currentAmount?: number;
-  investedAmount?: number;
+  currentAmount: number;
+  investedAmount: number;
   symbols: SymbolOwned[] | undefined;
-  totalAmount: number | undefined;
+  totalAmount: number;
 }
 
 const PortfolioQuickView: FC<PortfolioQuickViewProps> = ({
   symbols,
   totalAmount,
 }) => {
-  // const totalReturns = (currentAmount ?? 0) - (investedAmount ?? 0);
-
   const investedAmount = calculateInvestedAmount(symbols);
-
-  // const currentAmount = CalculateCurrentAmount();
 
   return (
     <div className="flex justify-center flex-col border border-border rounded-lg w-full bg-secondary-bg p-4">

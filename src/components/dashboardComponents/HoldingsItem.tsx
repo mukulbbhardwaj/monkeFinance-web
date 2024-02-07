@@ -34,7 +34,7 @@ const HoldingsItem: FC<SymbolInfoProps> = ({
           symbolName={symbolName}
           quantity={quantity}
           avgBuyPrice={avgBuyPrice}
-          currentPrice={formatPrice(currentPrice)}
+          currentPrice={currentPrice}
           returns={returns}
         >
           <p>{symbolName}</p>

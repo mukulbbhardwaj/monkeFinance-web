@@ -16,11 +16,11 @@ export function cn(...inputs: ClassValue[]) {
 //
 //
 export const formatPrice = (
-  num: number,
+  num: number | string | undefined,
   isCurrency: boolean = false
-): number => {
+): string => {
   if (num === undefined || isNaN(Number(num))) {
-    return NaN;
+    return "N/A";
   }
 
   const numericValue: number =
@@ -28,21 +28,21 @@ export const formatPrice = (
 
   if (!isNaN(numericValue)) {
     if (isCurrency) {
-      return parseFloat(numericValue.toFixed(2));
+      return numericValue.toFixed(2);
     } else {
       if (numericValue >= 1000000000) {
-        return parseFloat((numericValue / 1000000000).toFixed(2));
+        return (numericValue / 1000000000).toFixed(2) + "B";
       } else if (numericValue >= 1000000) {
-        return parseFloat((numericValue / 1000000).toFixed(2));
+        return (numericValue / 1000000).toFixed(2) + "M";
       } else if (numericValue >= 1000) {
-        return parseFloat((numericValue / 1000).toFixed(2));
+        return (numericValue / 1000).toFixed(2) + "K";
       } else {
-        return parseFloat(numericValue.toFixed(2));
+        return numericValue.toFixed(2);
       }
     }
   }
 
-  return NaN;
+  return "N/A";
 };
 
 
@@ -67,7 +67,7 @@ export const calculateTotalInvested = () => {};
 
 export const calculateInvestedAmount = (
   symbolInfo: SymbolOwned[] | undefined
-): number | string | undefined => {
+): number => {
   if (symbolInfo === undefined || symbolInfo.length === 0) {
     return NaN; // Return undefined if symbolInfo is undefined or empty
   }
