@@ -35,7 +35,7 @@ const BuyButton: FC<BuyButtonProps> = ({
     symbolPrice !== undefined ? symbolPrice * inputQuantity : 0;
   const handleBuyFunction = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/api/pt/addSymbol", {
+      const res = await axios.post(`${process.env.VITE_SERVER_URL}/api/pt/addSymbol`, {
         userId: userStore.user?.id,
         symbolName: symbolName,
         quantity: inputQuantity,

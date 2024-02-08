@@ -27,7 +27,7 @@ const LoginPage: FC<LoginPageProps> = () => {
   const loginButtonHandler = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/user/login",
+        `${process.env.VITE_SERVER_URL}/api/user/login`,
         {
           username,
           email,

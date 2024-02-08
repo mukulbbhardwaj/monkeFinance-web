@@ -26,11 +26,14 @@ const SignupPage: FC<SignupPageProps> = () => {
   };
   const signupButtonHandler = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/api/user/register", {
-        username,
-        password,
-        email,
-      });
+      const res = await axios.post(
+        `${process.env.VITE_SERVER_URL}/api/user/register`,
+        {
+          username,
+          password,
+          email,
+        }
+      );
       console.log(res.data);
     } catch (error) {
       console.error(error);
