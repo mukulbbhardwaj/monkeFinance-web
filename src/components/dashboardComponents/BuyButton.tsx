@@ -38,7 +38,7 @@ const BuyButton: FC<BuyButtonProps> = ({
       const res = await axios.post("http://localhost:3000/api/pt/addSymbol", {
         userId: userStore.user?.id,
         symbolName: symbolName,
-        quantity: quantity,
+        quantity: inputQuantity,
         // JUGAAD
         averagePrice: parseFloat(symbolPrice as unknown as string),
       });

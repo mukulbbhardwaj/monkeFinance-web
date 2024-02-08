@@ -1,6 +1,6 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import Layout from "../Layout";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom for navigation
+import { Link } from "react-router-dom";
 import heroBanner from "../assets/heroBanner.png";
 
 interface LandingPageProps {}
@@ -23,11 +23,18 @@ const exploreItems: { title: string; url: string; color: string }[] = [
   },
 ];
 
+const featureItems: { heading: string; desc: string }[] = [
+  {
+    heading: "Practice Without Risk, Trade with Confidence",
+    desc: "Master the art of investing with our risk-free virtual trading. Test strategies, refine skills, and build confidence using real-time market data. Perfect for beginners and experienced traders alike.",
+  },
+  {
+    heading: "Unlock In-Depth Financial Knowledge",
+    desc: "Elevate your financial understanding with expertly crafted video tutorials, articles, and interactive lessons. Whether a beginner or advanced trader, our platform provides a dynamic learning experience.",
+  },
+];
+
 const LandingPage: FC<LandingPageProps> = () => {
-  // const userStore = useStore();
-  useEffect(() => {
-    // console.log(userStore.user);
-  });
   return (
     <div className="">
       <Layout>
@@ -71,17 +78,19 @@ const LandingPage: FC<LandingPageProps> = () => {
           </div>
 
           {/* WHAT DO WE DO SECTION */}
-          <div className="my-8">
-            {/* Content describing what your project does */}
-            <h2 className="text-2xl font-semibold mb-4">What We Do</h2>
-            <p className="text-lg">Feautures</p>
-          </div>
-
-          {/* RECENT COMMENTS SECTION */}
-          <div className="my-8">
-            {/* Recent comments or testimonials */}
-            <h2 className="text-2xl font-semibold mb-4">Recent Comments</h2>
-            {/* Display recent comments or testimonials here */}
+          <h2 className="text-2xl font-bold">What We Do</h2>
+          <div className="my-8 flex ">
+            {featureItems.map((item) => (
+              <div
+                key={item.heading}
+                className="p-4 w-1/2 border rounded-xl m-4"
+              >
+                <h1 className="text-xl m-4">{item.heading}</h1>
+                <p className="text-sm text-secondary-foreground m-8">
+                  {item.desc}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </Layout>
