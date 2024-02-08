@@ -4,7 +4,7 @@ import axios from "axios";
 const getPortfolioInfo = async (userId:number|undefined) => {
     try {
         const res = await axios.get(
-          `${process.env.VITE_SERVER_URL}/api/pt/portfolio/${userId}`
+          `${import.meta.env.VITE_SERVER_URL}/api/pt/portfolio/${userId}`
         );
         return res.data.data;
     } catch (error) {

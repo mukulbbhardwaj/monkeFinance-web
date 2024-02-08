@@ -35,13 +35,16 @@ const BuyButton: FC<BuyButtonProps> = ({
     symbolPrice !== undefined ? symbolPrice * inputQuantity : 0;
   const handleBuyFunction = async () => {
     try {
-      const res = await axios.post(`${process.env.VITE_SERVER_URL}/api/pt/addSymbol`, {
-        userId: userStore.user?.id,
-        symbolName: symbolName,
-        quantity: inputQuantity,
-        // JUGAAD
-        averagePrice: parseFloat(symbolPrice as unknown as string),
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/api/pt/addSymbol`,
+        {
+          userId: userStore.user?.id,
+          symbolName: symbolName,
+          quantity: inputQuantity,
+          // JUGAAD
+          averagePrice: parseFloat(symbolPrice as unknown as string),
+        }
+      );
       console.log(res);
     } catch (error: unknown) {
       console.error("ERROR:", error);

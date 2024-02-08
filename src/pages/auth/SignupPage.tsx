@@ -27,7 +27,7 @@ const SignupPage: FC<SignupPageProps> = () => {
   const signupButtonHandler = async () => {
     try {
       const res = await axios.post(
-        `${process.env.VITE_SERVER_URL}/api/user/register`,
+        `${import.meta.env.VITE_SERVER_URL}/api/user/register`,
         {
           username,
           password,

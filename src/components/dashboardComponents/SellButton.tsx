@@ -36,12 +36,15 @@ const SellButton: FC<SellButtonProps> = ({
     symbolPrice !== undefined ? symbolPrice * sellQuantity : 0;
   const handleSellFunction = async () => {
     try {
-      const res = await axios.post("http://localhost:3000/api/pt/sellSymbol", {
-        userId: userStore.user?.id,
-        symbolName: symbolName,
-        quantity: sellQuantity,
-        sellingPrice : parseFloat(currentPrice as unknown as string) ,
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_SERVER_URL}/api/pt/sellSymbol`,
+        {
+          userId: userStore.user?.id,
+          symbolName: symbolName,
+          quantity: sellQuantity,
+          sellingPrice: parseFloat(currentPrice as unknown as string),
+        }
+      );
       console.log(res);
     } catch (error: unknown) {
       console.error("ERROR:", error);

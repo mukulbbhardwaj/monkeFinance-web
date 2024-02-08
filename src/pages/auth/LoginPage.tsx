@@ -27,7 +27,7 @@ const LoginPage: FC<LoginPageProps> = () => {
   const loginButtonHandler = async () => {
     try {
       const response = await axios.post(
-        `${process.env.VITE_SERVER_URL}/api/user/login`,
+        `${import.meta.env.VITE_SERVER_URL}/api/user/login`,
         {
           username,
           email,
@@ -72,7 +72,7 @@ const LoginPage: FC<LoginPageProps> = () => {
         <div className="flex text-sm items-center">
           <p>
             don't have an account yet?{" "}
-            <Link to="/signup" className="text-blue-500">
+            <Link to="/register" className="text-blue-500">
               Sign up
             </Link>
           </p>
