@@ -35,6 +35,17 @@ const DashboardPage: FC<DashboardPageProps> = () => {
       fetchPortfolioData();
     }
   }, [userdata.user]);
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('User'));
+    console.log(user?.state?.user);
+     const fetchPortfolioData = async () => {
+       const data: PortfolioData = await getPortfolioInfo(user?.state?.user?.id);
+       setPortfolioInfo(data);
+     };
+     if (user?.state?.user?.id) {
+       fetchPortfolioData();
+     }
+   }, []);
 
   return (
     <>
