@@ -19,7 +19,7 @@ const InputComponent: FC<InputComponentProps> = ({
       <input
         placeholder={placeholder}
         type={inputType}
-        className="border bg-transparent outline-none p-2 text-base "
+        className="border bg-transparent outline-none p-4 text-base rounded-lg "
         onChange={onChange}
       />
     </div>

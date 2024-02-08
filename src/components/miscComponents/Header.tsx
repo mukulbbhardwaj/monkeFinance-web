@@ -65,7 +65,7 @@ const Header: FC<HeaderProps> = () => {
             ) : (
               <DropdownMenuItem className="flex align-top">
                 <p>
-                  <Link to={"login"} className="underline">
+                  <Link to={"/login"} className="underline">
                     Login
                   </Link>{" "}
                   or{" "}

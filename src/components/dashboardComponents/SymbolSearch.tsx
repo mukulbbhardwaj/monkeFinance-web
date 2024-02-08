@@ -47,7 +47,7 @@ const SymbolSearch = () => {
   return (
     <div className="w-full bg-secondary-bg mt-2 border border-border rounded-lg ">
       <div className="  ">
-        <div className="flex flex-col items-center ">
+        <div className="flex flex-col items-center p-4 ">
           <InputComponent
             inputLabel="Search Symbol"
             inputType="string"

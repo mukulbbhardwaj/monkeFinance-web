@@ -19,21 +19,27 @@ interface BuyButtonProps {
   quantity?: number;
 }
 
-const BuyButton: FC<BuyButtonProps> = ({ symbolName, symbolPrice,btnTitle,quantity }) => {
+const BuyButton: FC<BuyButtonProps> = ({
+  symbolName,
+  symbolPrice,
+  btnTitle,
+  quantity,
+}) => {
   const [inputQuantity, setInputQuantity] = useState<number>(0);
   const userStore = useStore();
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newQuantity = parseInt(event.target.value, 10);
     setInputQuantity(isNaN(newQuantity) || newQuantity < 1 ? 1 : newQuantity);
   };
-  const estimatedPrice = symbolPrice !== undefined ? symbolPrice * inputQuantity : 0;
+  const estimatedPrice =
+    symbolPrice !== undefined ? symbolPrice * inputQuantity : 0;
   const handleBuyFunction = async () => {
     try {
       const res = await axios.post("http://localhost:3000/api/pt/addSymbol", {
         userId: userStore.user?.id,
         symbolName: symbolName,
         quantity: quantity,
-        // JUGAAD 
+        // JUGAAD
         averagePrice: parseFloat(symbolPrice as unknown as string),
       });
       console.log(res);
@@ -42,13 +48,12 @@ const BuyButton: FC<BuyButtonProps> = ({ symbolName, symbolPrice,btnTitle,quanti
     }
   };
 
-
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"default"}>{btnTitle }</Button>
+        <Button variant={"default"}>{btnTitle}</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] text-black bg-slate-400">
+      <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Fill the data </DialogTitle>
         </DialogHeader>

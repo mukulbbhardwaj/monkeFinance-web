@@ -24,6 +24,7 @@ const SellButton: FC<SellButtonProps> = ({
   symbolName,
   symbolPrice,
   quantity,
+  currentPrice,
 }) => {
   const [sellQuantity, setSellQuantity] = useState<number>(0);
   const userStore = useStore();
@@ -33,13 +34,13 @@ const SellButton: FC<SellButtonProps> = ({
   };
   const estimatedPrice =
     symbolPrice !== undefined ? symbolPrice * sellQuantity : 0;
-  const handleBuyFunction = async () => {
+  const handleSellFunction = async () => {
     try {
       const res = await axios.post("http://localhost:3000/api/pt/sellSymbol", {
         userId: userStore.user?.id,
         symbolName: symbolName,
         quantity: sellQuantity,
-        averagePrice: parseFloat(symbolPrice as unknown as string),
+        sellingPrice : parseFloat(currentPrice as unknown as string) ,
       });
       console.log(res);
     } catch (error: unknown) {
@@ -76,7 +77,7 @@ const SellButton: FC<SellButtonProps> = ({
           <p>Estimated Price : {estimatedPrice}</p>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleBuyFunction}>
+          <Button type="submit" onClick={handleSellFunction}>
             Sell
           </Button>
         </DialogFooter>
