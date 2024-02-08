@@ -36,15 +36,25 @@ const DashboardPage: FC<DashboardPageProps> = () => {
     }
   }, [userdata.user]);
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('User'));
-    console.log(user?.state?.user);
-     const fetchPortfolioData = async () => {
-       const data: PortfolioData = await getPortfolioInfo(user?.state?.user?.id);
-       setPortfolioInfo(data);
-     };
-     if (user?.state?.user?.id) {
-       fetchPortfolioData();
-     }
+    // const user = JSON.parse(localStorage.getItem('User'));
+    const userString = localStorage.getItem("User");
+
+    if (userString !== null) {
+      const user = JSON.parse(userString);
+      // Now you can use the 'user' object
+      const fetchPortfolioData = async () => {
+        const data: PortfolioData = await getPortfolioInfo(
+          user?.state?.user?.id
+        );
+        setPortfolioInfo(data);
+      };
+      if (user?.state?.user?.id) {
+        fetchPortfolioData();
+      }
+    } else {
+      // Handle the case when 'User' key is not present in localStorage
+      console.error("User key not found in localStorage");
+    }   
    }, []);
 
   return (
