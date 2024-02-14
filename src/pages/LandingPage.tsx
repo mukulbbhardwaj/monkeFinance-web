@@ -39,7 +39,6 @@ const LandingPage: FC<LandingPageProps> = () => {
     <div className="">
       <Layout>
         <div className="flex flex-col">
-          {/* HERO SECTION */}
           <div className="flex justify-between align-center items-center mb-4">
             <div className=" lg:w-1/2">
               <h1 className="text-4xl leading-tight font-bold mb-4 mt-8">
@@ -77,13 +76,13 @@ const LandingPage: FC<LandingPageProps> = () => {
             </div>
           </div>
 
-          {/* WHAT DO WE DO SECTION */}
+
           <h2 className="text-2xl font-bold">What We Do</h2>
-          <div className="my-8 flex ">
+          <div className="my-8 flex flex-col lg:flex-row ">
             {featureItems.map((item) => (
               <div
                 key={item.heading}
-                className="p-4 w-1/2 border rounded-xl m-4"
+                className="p-4 border rounded-xl m-1"
               >
                 <h1 className="text-xl m-4">{item.heading}</h1>
                 <p className="text-sm text-secondary-foreground m-8">
