@@ -28,18 +28,14 @@ const LoginPage: FC<LoginPageProps> = () => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/user/login`,
+        
         {
           username,
           email,
           password,
         }
       );
-      console.log("Login Response:", response.data.user);
-      // const {userId} = 
-
       loginStore.loginUser({ username: username, email: email, id: response.data.user.id });
-      // console.log("From LOgin:", loginStore.user);
-      console.log('From Store Login', loginStore.user);
       navigate("/");
     } catch (error) {
       console.error("Login error:", error);

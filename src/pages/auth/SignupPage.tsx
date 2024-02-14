@@ -12,21 +12,16 @@ const SignupPage: FC<SignupPageProps> = () => {
   const [email, setEmail] = useState("");
   const handleUsername = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
-    console.log("username", username);
   };
-
   const handlePassword = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
-    console.log("password", password);
   };
-
   const handleEmailId = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
-    console.log("password", email);
   };
   const signupButtonHandler = async () => {
     try {
-      const res = await axios.post(
+      await axios.post(
         `${import.meta.env.VITE_SERVER_URL}/api/user/register`,
         {
           username,
@@ -34,12 +29,10 @@ const SignupPage: FC<SignupPageProps> = () => {
           email,
         }
       );
-      console.log(res.data);
     } catch (error) {
       console.error(error);
     }
   };
-
   return (
     <div className="flex flex-col items-center gap-32">
       <MainLogo />

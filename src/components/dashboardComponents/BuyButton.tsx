@@ -41,7 +41,6 @@ const BuyButton: FC<BuyButtonProps> = ({
           userId: userStore.user?.id,
           symbolName: symbolName,
           quantity: inputQuantity,
-          // JUGAAD
           averagePrice: parseFloat(symbolPrice as unknown as string),
         }
       );
