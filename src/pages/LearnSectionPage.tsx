@@ -8,7 +8,7 @@ interface LearnSectionPageProps {
 const LearnSectionPage: FC<LearnSectionPageProps> = () => {
   return <div>
     <Layout>
-  h   
+  h  
     </Layout>
   </div>
 }

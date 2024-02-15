@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import useStore from "@/store/userStore";
 import InputComponent from "../miscComponents/InputComponent";
+import { toast } from "react-toastify";
 
 interface BuyButtonProps {
   symbolName: string;
@@ -35,16 +36,13 @@ const BuyButton: FC<BuyButtonProps> = ({
     symbolPrice !== undefined ? symbolPrice * inputQuantity : 0;
   const handleBuyFunction = async () => {
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/pt/addSymbol`,
-        {
-          userId: userStore.user?.id,
-          symbolName: symbolName,
-          quantity: inputQuantity,
-          averagePrice: parseFloat(symbolPrice as unknown as string),
-        }
-      );
-      console.log(res);
+      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/pt/addSymbol`, {
+        userId: userStore.user?.id,
+        symbolName: symbolName,
+        quantity: inputQuantity,
+        averagePrice: parseFloat(symbolPrice as unknown as string),
+      });
+      toast.success("Transfer Success : Buy");
     } catch (error: unknown) {
       console.error("ERROR:", error);
     }

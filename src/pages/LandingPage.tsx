@@ -63,9 +63,8 @@ const LandingPage: FC<LandingPageProps> = () => {
             <h2 className="text-2xl font-bold mb-4">Explore</h2>
             <div className="flex flex-col sm:flex-row items-center justify-center text-black ">
               {exploreItems.map((item) => (
-                <div>
+                <div key={item.title}>
                   <Link
-                    key={item.title}
                     to={item.url}
                     className={` ${item.color} mr-4 p-16 mb-4 font-lg border border-border w-64 h-32 flex justify-center items-center text-center font-bold rounded-3xl hover:bg-card-hovered hover:scale-105`}
                   >
@@ -76,14 +75,10 @@ const LandingPage: FC<LandingPageProps> = () => {
             </div>
           </div>
 
-
           <h2 className="text-2xl font-bold">What We Do</h2>
           <div className="my-8 flex flex-col lg:flex-row ">
             {featureItems.map((item) => (
-              <div
-                key={item.heading}
-                className="p-4 border rounded-xl m-1"
-              >
+              <div key={item.heading} className="p-4 border rounded-xl m-1">
                 <h1 className="text-xl m-4">{item.heading}</h1>
                 <p className="text-sm text-secondary-foreground m-8">
                   {item.desc}

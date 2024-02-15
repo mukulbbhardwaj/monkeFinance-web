@@ -14,6 +14,7 @@ import { Button } from "../ui/button";
 import { Menu } from "lucide-react";
 import { DropdownMenuGroup } from "@radix-ui/react-dropdown-menu";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const menus: { title: string; href: string }[] = [
   { title: "Learn", href: "/learn" },
@@ -27,6 +28,7 @@ const Header: FC<HeaderProps> = () => {
   const navigate = useNavigate();
   const handleLogOut = () => {
     userStore.logoutUser();
+    toast.info("Logged Out");
     navigate("/");
   };
   return (

@@ -1,11 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-
-// import App from './App.tsx'
-import "./App.css";
 import "./index.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-// import LandingPage from "./pages/LandingPage.tsx";
 
 import BlogSectionPage from "./pages/BlogSectionPage.tsx";
 import LearnSectionPage from "./pages/LearnSectionPage.tsx";
@@ -14,6 +10,9 @@ import SignupPage from "./pages/auth/SignupPage.tsx";
 import DashboardPage from "./pages/DashboardPage.tsx";
 import LandingPage from "./pages/LandingPage.tsx";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -21,7 +20,7 @@ const router = createBrowserRouter([
   },
   {
     path: `/dashboard/:id`,
-    element: <DashboardPage/>,
+    element: <DashboardPage />,
   },
   {
     path: "/login",
@@ -38,14 +37,14 @@ const router = createBrowserRouter([
   {
     path: "/blogs",
     element: <BlogSectionPage />,
-  }
-  
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <div>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
+      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   </React.StrictMode>
 );
