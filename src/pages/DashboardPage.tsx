@@ -50,7 +50,6 @@ const DashboardPage: FC<DashboardPageProps> = () => {
         fetchPortfolioData();
       }
     } else {
-      // Handle the case when 'User' key is not present in localStorage
       console.error("User key not found in localStorage");
     }
   }, []);
@@ -60,6 +59,10 @@ const DashboardPage: FC<DashboardPageProps> = () => {
       <Layout>
         <div className="flex flex-col mt-8 lg:flex-row  lg:justify-around lg:align-top lg:items-start ">
           <div className="">
+            <p className="border mb-4 w-full rounded-lg p-4">
+              Hello
+            <p >{userdata.user?.username}</p>
+            </p>
             <PortfolioQuickView
               investedAmount={portfolioInfo?.totalAmount || 0}
               currentAmount={12400}
@@ -83,7 +86,6 @@ const DashboardPage: FC<DashboardPageProps> = () => {
             })}
           </div>
         </div>
-        {/* <LatestNewsSection/> */}
       </Layout>
     </>
   );

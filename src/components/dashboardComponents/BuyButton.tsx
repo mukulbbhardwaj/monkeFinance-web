@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useState } from "react";
 import {
   Dialog,
@@ -43,8 +44,9 @@ const BuyButton: FC<BuyButtonProps> = ({
         averagePrice: parseFloat(symbolPrice as unknown as string),
       });
       toast.success("Transfer Success : Buy");
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error("ERROR:", error);
+      toast.error(`${error?.response.data.message}`)
     }
   };
 

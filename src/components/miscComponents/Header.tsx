@@ -56,7 +56,7 @@ const Header: FC<HeaderProps> = () => {
             {userStore.user ? (
               <>
                 <DropdownMenuItem>
-                  <Link to={`/dashboard/${userStore.user?.username}`}>
+                  <Link to={`/dashboard`}>
                     Portfolio
                   </Link>
                 </DropdownMenuItem>

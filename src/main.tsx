@@ -19,7 +19,7 @@ const router = createBrowserRouter([
     element: <LandingPage />,
   },
   {
-    path: `/dashboard/:id`,
+    path: `/dashboard`,
     element: <DashboardPage />,
   },
   {

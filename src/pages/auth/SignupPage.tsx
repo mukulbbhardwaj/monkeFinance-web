@@ -3,6 +3,9 @@ import MainLogo from "../../components/miscComponents/MainLogo";
 import InputComponent from "../../components/miscComponents/InputComponent";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
+import useStore from "../../store/userStore";
+import { useNavigate } from "react-router-dom";
 
 interface SignupPageProps {}
 
@@ -10,6 +13,7 @@ const SignupPage: FC<SignupPageProps> = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
   const handleUsername = (event: ChangeEvent<HTMLInputElement>) => {
     setUsername(event.target.value);
   };
@@ -19,19 +23,48 @@ const SignupPage: FC<SignupPageProps> = () => {
   const handleEmailId = (event: ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
+
+  const navigate = useNavigate();
+  const loginStore = useStore();
+
   const signupButtonHandler = async () => {
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/user/register`,
-        {
-          username,
-          password,
-          email,
-        }
-      );
-    } catch (error) {
-      console.error(error);
+    if (username&&password&&email) {
+       try {
+         setLoading(true);
+         await axios.post(
+           `${import.meta.env.VITE_SERVER_URL}/api/user/register`,
+           {
+             username,
+             password,
+             email,
+           }
+         );
+         const loginResponse = await axios.post(
+           `${import.meta.env.VITE_SERVER_URL}/api/user/login`,
+           {
+             username,
+             password,
+           }
+         );
+         loginStore.loginUser({
+           username: loginResponse.data.user.username,
+           email: loginResponse.data.user.email,
+           id: loginResponse.data.user.id,
+         });
+
+         toast.success("Account Created Successfully!");
+         setLoading(false);
+         navigate("/");
+       } catch (error) {
+         console.error(error);
+       } finally {
+         setLoading(false);
+       }
+    } else {
+      toast.warning("Input Fields Cannot be empty")
+      
     }
+   
   };
   return (
     <div className="flex flex-col items-center gap-32">
@@ -58,8 +91,9 @@ const SignupPage: FC<SignupPageProps> = () => {
         <button
           className="bg-[#B6CCD7] text-black text-sm text-center p-2 rounded w-4/5 "
           onClick={signupButtonHandler}
+          disabled={loading} 
         >
-          SignUp
+          {loading ? "Signing up..." : "Sign Up"}
         </button>
         <div className="flex text-sm items-center">
           <p>

@@ -3,12 +3,13 @@ import Layout from "../Layout";
 import { Link } from "react-router-dom";
 import heroBanner from "../assets/heroBanner.png";
 
+
 interface LandingPageProps {}
 
 const exploreItems: { title: string; url: string; color: string }[] = [
   {
     title: " Start Paper Trading",
-    url: "/dashboard/:id",
+    url: "/dashboard",
     color: "bg-[#e38786]",
   },
   {
@@ -36,7 +37,7 @@ const featureItems: { heading: string; desc: string }[] = [
 
 const LandingPage: FC<LandingPageProps> = () => {
   return (
-    <div className="">
+    <>
       <Layout>
         <div className="flex flex-col">
           <div className="flex justify-between align-center items-center mb-4">
@@ -88,7 +89,7 @@ const LandingPage: FC<LandingPageProps> = () => {
           </div>
         </div>
       </Layout>
-    </div>
+    </>
   );
 };
 
