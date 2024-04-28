@@ -24,6 +24,7 @@ const PortfolioQuickView: FC<PortfolioQuickViewProps> = ({
   const investedAmount = calculateInvestedAmount(symbols);
 
   return (
+   
     <div className="flex justify-center flex-col border border-border rounded-lg w-full bg-secondary-bg p-4">
       <h1 className="text-sm">Your Portfolio</h1>
       <div className="flex justify-between m-4 ">

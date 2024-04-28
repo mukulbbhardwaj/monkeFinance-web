@@ -3,7 +3,6 @@ import Layout from "../Layout";
 import { Link } from "react-router-dom";
 import heroBanner from "../assets/heroBanner.png";
 
-
 interface LandingPageProps {}
 
 const exploreItems: { title: string; url: string; color: string }[] = [
