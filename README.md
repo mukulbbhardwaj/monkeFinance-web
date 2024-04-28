@@ -1,3 +1,3 @@
 # MonkeFinance
-A platform to learn trading in a gamified manner
+A platform to learn trading and investment.
 
