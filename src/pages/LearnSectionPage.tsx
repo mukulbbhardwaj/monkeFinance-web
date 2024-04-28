@@ -8,7 +8,7 @@ const LearnSectionPage: FC<LearnSectionPageProps> = () => {
   return (
     <div>
       <Layout>
-        <div className="text-4xl font-bold my-16 ">Modules</div>
+        <div className="text-6xl font-bold my-16 ">Modules</div>
         <ModulesList />
       </Layout>
     </div>

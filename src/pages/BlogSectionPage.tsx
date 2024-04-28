@@ -5,9 +5,10 @@ interface BlogSectionPageProps {}
 
 const BlogSectionPage: FC<BlogSectionPageProps> = () => {
   return (
-    <div>
-      <Layout> Blogs Here</Layout>
-    </div>
+    <Layout>
+      <h2 className="text-4xl my-8 border-b-4 w-min border-green">Blogs</h2>
+      <div className="text-2xl text-center h-screen	">Coming soon...</div>
+    </Layout>
   );
 };
 

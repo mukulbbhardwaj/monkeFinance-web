@@ -9,19 +9,19 @@ interface ModuleProps {
 }
 
 const Module: FC<ModuleProps> = ({ name, desc, id, color }) => {
-  const borderColor = color ? color : "green";
+  
 
   return (
-    <div className="w-64">
+    <div className="lg:w-64">
       <div className="flex gap-4 justify-center items-center">
-        <div className="text-lg font-bold">{id}</div>
-        <div className={`w-full h-0 border-2  border-${borderColor}`} />
+        <div className="text-2xl font-bold">{id}</div>
+        <div className={`w-full h-0 border-2  border-${color}`} />
       </div>
       <div className="ml-1">
-        <Link to={`/modules/${id}`}>
-          <div className="text-bold text-lg">{name}</div>
+        <Link to={`/modules/${id}`} className="link">
+          <div className="text-bold text-xl">{name}</div>
         </Link>
-        <div className="text-sm text-secondary-foreground"> {desc}</div>
+        <div className="text-sm text-secondary-foreground my-2"> {desc}</div>
       </div>
     </div>
   );

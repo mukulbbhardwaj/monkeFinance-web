@@ -25,6 +25,7 @@ export const theme = {
       foreground: "hsl(var(--foreground))",
       green: "#00FF00",
       red: "#FF0000",
+      line2: "#e08787",
       primary: {
         DEFAULT: "hsl(var(--primary))",
         foreground: "hsl(var(--primary-foreground))",
