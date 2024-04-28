@@ -34,7 +34,8 @@ const DashboardPage: FC<DashboardPageProps> = () => {
     if (userdata.user) {
       fetchPortfolioData();
     }
-  }, [userdata.user]);
+  }, [userdata.user,portfolioInfo]);
+
   useEffect(() => {
     const userString = localStorage.getItem("User");
 
@@ -55,7 +56,6 @@ const DashboardPage: FC<DashboardPageProps> = () => {
   }, []);
 
   return (
-    <>
       <Layout>
         <div className="flex flex-col mt-8 lg:flex-row  lg:justify-around lg:align-top lg:items-start ">
           <div className="">
@@ -87,7 +87,6 @@ const DashboardPage: FC<DashboardPageProps> = () => {
           </div>
         </div>
       </Layout>
-    </>
   );
 };
 

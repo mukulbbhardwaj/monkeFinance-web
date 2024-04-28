@@ -12,6 +12,8 @@ import LandingPage from "./pages/LandingPage.tsx";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ModulePage from "./components/learnSectionComponents/ModulePage.tsx";
+import ChapterPage from "./components/learnSectionComponents/ChapterPage.tsx";
 
 const router = createBrowserRouter([
   {
@@ -37,6 +39,14 @@ const router = createBrowserRouter([
   {
     path: "/blogs",
     element: <BlogSectionPage />,
+  },
+  {
+    path: "/modules/:id",
+    element: <ModulePage />,
+  },
+  {
+    path: "/modules/:id/chapter/:chapterID",
+    element: <ChapterPage />,
   },
 ]);
 
