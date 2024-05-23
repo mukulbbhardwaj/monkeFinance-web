@@ -123,3 +123,8 @@ button:hover {
    color: #87b5e0;
    cursor: pointer;
 }
+
+
+.markdown > * {
+  all: revert;
+}

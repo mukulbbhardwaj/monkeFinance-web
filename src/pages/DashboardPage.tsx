@@ -1,11 +1,11 @@
 import { FC, useEffect, useState } from "react";
 import Layout from "../Layout";
 import useStore from "@/store/userStore";
-// import PortfolioQuickView from "@/components/dashboardComponents/PortfolioQuickView";
-// import SymbolInfo from "@/components/dashboardComponents/HoldingsItem";
-// import SymbolSearch from "@/components/dashboardComponents/SymbolSearch";
+import PortfolioQuickView from "@/components/dashboardComponents/PortfolioQuickView";
+import SymbolInfo from "@/components/dashboardComponents/HoldingsItem";
+import SymbolSearch from "@/components/dashboardComponents/SymbolSearch";
 import getPortfolioInfo from "@/api/getPortfolioInfo";
-import { Construction} from "lucide-react";
+// import { Construction } from "lucide-react";
 
 interface DashboardPageProps {}
 
@@ -58,7 +58,7 @@ const DashboardPage: FC<DashboardPageProps> = () => {
 
   return (
     <Layout>
-      {/* <div className="flex flex-col mt-8 lg:flex-row  lg:justify-around lg:align-top lg:items-start ">
+      <div className="flex flex-col mt-8 lg:flex-row  lg:justify-around lg:align-top lg:items-start ">
           <div className="">
             <p className="border mb-4 w-full rounded-lg p-4">
               Hello
@@ -86,11 +86,11 @@ const DashboardPage: FC<DashboardPageProps> = () => {
               );
             })}
           </div>
-        </div> */}
-      <div className="text-4xl flex justify-center items-center gap-4">
+        </div>
+      {/* <div className="text-4xl flex justify-center items-center gap-4">
         <Construction size={64} color="red" /> Under Maintenance
       </div>
-      <p className="text-sm text-center">:) This feature will be back soon...</p>
+      <p className="text-sm text-center">:) This feature will be back soon...</p> */}
     </Layout>
   );
 };

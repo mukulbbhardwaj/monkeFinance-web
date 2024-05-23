@@ -1,3 +1,4 @@
+// import SymbolInfo from "@/components/dashboardComponents/SymbolInfo";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -7,6 +8,10 @@ interface SymbolOwned {
   quantity: number;
   symbolName: string;
 }
+// interface BinanceTradeUpdate {
+//   s: string;
+//   p: number;
+// }
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -44,7 +49,6 @@ export const formatPrice = (
   return "N/A";
 };
 
-
 //
 //
 //
@@ -54,12 +58,10 @@ export const calculateReturns = (
   currentPrice: number,
   quantity: number
 ): number => {
-
-
   const totalInvestment = avgBuyPrice * quantity;
-  const currentInvestmentValue = (currentPrice) * quantity;
+  const currentInvestmentValue = currentPrice * quantity;
 
-  return (currentInvestmentValue - totalInvestment);
+  return currentInvestmentValue - totalInvestment;
 };
 
 export const calculateTotalInvested = () => {};
@@ -74,5 +76,7 @@ export const calculateInvestedAmount = (
   symbolInfo.forEach(({ averagePrice, quantity }) => {
     totalInvestedAmount += averagePrice * quantity;
   });
-  return totalInvestedAmount ;
+  return totalInvestedAmount;
 };
+
+

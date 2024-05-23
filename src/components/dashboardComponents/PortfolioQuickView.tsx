@@ -22,6 +22,7 @@ const PortfolioQuickView: FC<PortfolioQuickViewProps> = ({
   totalAmount,
 }) => {
   const investedAmount = calculateInvestedAmount(symbols);
+  // const currentValue = calculateCurrentValue(symbols);
 
   return (
    
@@ -36,6 +37,7 @@ const PortfolioQuickView: FC<PortfolioQuickViewProps> = ({
             </h1>
             <h2 className="text-heading text-lg">
               ₹{formatPrice(totalAmount)}
+              {/* {currentValue} */}
             </h2>
           </div>
           <div className="lg:p-4">
@@ -48,13 +50,13 @@ const PortfolioQuickView: FC<PortfolioQuickViewProps> = ({
             </h2>
           </div>
         </div>
-        <div className="lg:p-4">
+        {/* <div className="lg:p-4">
           <h1 className="text-secondary-foreground text-sm flex items-center gap-1">
             Total Returns{" "}
             <InfoToolTip description="Total Returns on Invested Amount" />
           </h1>
-          {/* <h2 className="text-green text-lg">₹{totalReturns}</h2> */}
-        </div>
+          <h2 className="text-green text-lg">₹{totalReturns}</h2>
+        </div> */}
       </div>
     </div>
   );

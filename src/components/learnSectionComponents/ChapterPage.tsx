@@ -30,7 +30,7 @@ const ChapterPage: FC<ChapterPageProps> = () => {
       <div className="flex justify-center ">
         <div className=" w-7/12	my-4">
           <ReactMarkdown
-            className="markdown leading-relaxed		"
+            className="markdown"
             children={chapterContent}
           />
         </div>
