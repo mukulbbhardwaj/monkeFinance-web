@@ -55,6 +55,24 @@ export const theme = {
         DEFAULT: "hsl(var(--card))",
         foreground: "hsl(var(--card-foreground))",
       },
+      buy: {
+        DEFAULT: "hsl(var(--buy))",
+        foreground: "hsl(var(--buy-foreground))",
+        hover: "hsl(var(--buy-hover))",
+      },
+      sell: {
+        DEFAULT: "hsl(var(--sell))",
+        foreground: "hsl(var(--sell-foreground))",
+        hover: "hsl(var(--sell-hover))",
+      },
+      profit: {
+        DEFAULT: "hsl(var(--profit))",
+        foreground: "hsl(var(--profit-foreground))",
+      },
+      loss: {
+        DEFAULT: "hsl(var(--loss))",
+        foreground: "hsl(var(--loss-foreground))",
+      },
     },
     borderRadius: {
       lg: "18px",

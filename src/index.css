@@ -53,6 +53,16 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+    --buy: 142 76% 36%;
+    --buy-foreground: 0 0% 100%;
+    --buy-hover: 142 76% 32%;
+    --sell: 0 84% 60%;
+    --sell-foreground: 0 0% 100%;
+    --sell-hover: 0 84% 55%;
+    --profit: 142 76% 36%;
+    --profit-foreground: 142 76% 50%;
+    --loss: 0 84% 60%;
+    --loss-foreground: 0 84% 70%;
   }
 
   .dark {
@@ -76,6 +86,16 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
+    --buy: 142 76% 36%;
+    --buy-foreground: 0 0% 100%;
+    --buy-hover: 142 76% 32%;
+    --sell: 0 84% 60%;
+    --sell-foreground: 0 0% 100%;
+    --sell-hover: 0 84% 55%;
+    --profit: 142 76% 36%;
+    --profit-foreground: 142 76% 50%;
+    --loss: 0 84% 60%;
+    --loss-foreground: 0 84% 70%;
   }
 }
 

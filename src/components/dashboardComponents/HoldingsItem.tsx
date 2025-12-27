@@ -1,49 +1,39 @@
-import { FC, useEffect, useState } from "react";
+import { FC } from "react";
 import SymbolInfo from "./SymbolInfo";
-import { subscribeToSymbol } from "@/api/binance";
-import { calculateReturns, formatPrice } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils";
 import { TrendingUp, TrendingDown } from "lucide-react";
 
 interface HoldingsItemProps {
   symbolName: string;
   avgBuyPrice: number;
   quantity: number;
+  currentPrice: number;
+  unrealizedPnL: number;
+  unrealizedPnLPercent: number;
 }
 
 const HoldingsItem: FC<HoldingsItemProps> = ({
   symbolName,
   avgBuyPrice,
   quantity,
+  currentPrice,
+  unrealizedPnL,
+  unrealizedPnLPercent,
 }) => {
-  const [currentPrice, setCurrentPrice] = useState<number>(0);
-  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    setIsLoading(true);
-    const ws = subscribeToSymbol(symbolName, (data) => {
-      setCurrentPrice(data.p as number);
-      setIsLoading(false);
-    });
-    
-    return () => {
-      ws.close();
-    };
-  }, [symbolName]);
-
-  const returns = calculateReturns(avgBuyPrice, currentPrice, quantity);
-  const returnPercentage = avgBuyPrice > 0 
-    ? (((currentPrice - avgBuyPrice) / avgBuyPrice) * 100).toFixed(2)
-    : "0.00";
+  const isProfit = unrealizedPnL >= 0;
+  const profitColor = isProfit ? "text-profit" : "text-loss";
+  const profitBgColor = isProfit ? "bg-profit/10 border-profit/20" : "bg-loss/10 border-loss/20";
 
   return (
-    <div className="flex border border-border justify-between p-4 rounded-lg bg-card hover:bg-card-hovered transition-colors items-center shadow-sm">
+    <div className={`flex border border-border justify-between p-4 rounded-lg bg-card hover:bg-card-hovered transition-colors items-center shadow-sm ${profitBgColor}`}>
       <div className="flex flex-col flex-1">
         <SymbolInfo
           symbolName={symbolName}
           quantity={quantity}
           avgBuyPrice={avgBuyPrice}
           currentPrice={currentPrice}
-          returns={returns}
+          returns={unrealizedPnL}
         >
           <p className="font-semibold text-lg">{symbolName}</p>
         </SymbolInfo>
@@ -52,23 +42,17 @@ const HoldingsItem: FC<HoldingsItemProps> = ({
         </p>
       </div>
       <div className="flex flex-col items-end gap-1">
-        {isLoading ? (
-          <p className="text-sm text-muted-foreground">Loading...</p>
-        ) : (
-          <>
-            <p className="font-semibold">₹{formatPrice(currentPrice)}</p>
-            <div className="flex items-center gap-1">
-              {returns >= 0 ? (
-                <TrendingUp className="h-4 w-4 text-green-500" />
-              ) : (
-                <TrendingDown className="h-4 w-4 text-red-500" />
-              )}
-              <p className={`text-xs font-medium ${returns >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                {returns >= 0 ? '+' : ''}₹{formatPrice(Math.abs(returns))} ({returnPercentage}%)
-              </p>
-            </div>
-          </>
-        )}
+        <p className="font-semibold">₹{formatPrice(currentPrice)}</p>
+        <div className={`flex items-center gap-1.5 px-2 py-1 rounded-md ${profitBgColor}`}>
+          {isProfit ? (
+            <TrendingUp className="h-4 w-4 text-profit" />
+          ) : (
+            <TrendingDown className="h-4 w-4 text-loss" />
+          )}
+          <p className={`text-xs font-bold ${profitColor}`}>
+            {isProfit ? '+' : ''}₹{formatPrice(Math.abs(unrealizedPnL))} ({isProfit ? '+' : ''}{unrealizedPnLPercent.toFixed(2)}%)
+          </p>
+        </div>
       </div>
     </div>
   );

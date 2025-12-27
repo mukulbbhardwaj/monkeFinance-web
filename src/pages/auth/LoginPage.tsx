@@ -2,7 +2,7 @@ import { ChangeEvent, FC, useState } from "react";
 import MainLogo from "../../components/miscComponents/MainLogo";
 import InputComponent from "../../components/miscComponents/InputComponent";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../lib/api";
 import useStore from "../../store/userStore";
 import { toast } from "react-toastify";
 
@@ -26,27 +26,31 @@ const LoginPage: FC<LoginPageProps> = () => {
     if (username && password) {
       try {
         setLoading(true);
-        const response = await axios.post(
-          `${import.meta.env.VITE_SERVER_URL}/api/user/login`,
-          {
-            username,
-            password,
-          }
-        );
-        loginStore.loginUser({
-          username: username,
-          email: response.data.user.email || "",
-          id: response.data.user.id,
+        const response = await apiClient.post("/api/auth/login", {
+          username,
+          password,
         });
-        toast.success(`Hi! ${username}`);
-        navigate("/");
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+        if (response.data.success && response.data.data) {
+          const { user, token } = response.data.data;
+          loginStore.loginUser(
+            {
+              username: user.username,
+              email: user.email || "",
+              id: user.id,
+            },
+            token
+          );
+          toast.success(`Hi! ${user.username}`);
+          navigate("/");
+        } else {
+          toast.error(response.data.message || "Login failed");
+        }
       } catch (error: any) {
         console.error(error);
         if (error.response) {
           const errorMessage =
-            error.response.data.message || "An error occurred during login.";
-
+            error.response.data?.message || "An error occurred during login.";
           toast.error(`Login Error: ${errorMessage}`);
         } else if (error.request) {
           toast.error("No response received from the server.", {

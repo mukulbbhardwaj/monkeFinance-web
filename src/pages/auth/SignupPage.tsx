@@ -2,7 +2,7 @@ import { ChangeEvent, FC, useState } from "react";
 import MainLogo from "../../components/miscComponents/MainLogo";
 import InputComponent from "../../components/miscComponents/InputComponent";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import apiClient from "../../lib/api";
 import { toast } from "react-toastify";
 import useStore from "../../store/userStore";
 import { useNavigate } from "react-router-dom";
@@ -28,80 +28,86 @@ const SignupPage: FC<SignupPageProps> = () => {
   const loginStore = useStore();
 
   const signupButtonHandler = async () => {
-    if (username&&password&&email) {
-       try {
-         setLoading(true);
-         await axios.post(
-           `${import.meta.env.VITE_SERVER_URL}/api/user/register`,
-           {
-             username,
-             password,
-             email,
-           }
-         );
-         const loginResponse = await axios.post(
-           `${import.meta.env.VITE_SERVER_URL}/api/user/login`,
-           {
-             username,
-             password,
-           }
-         );
-         loginStore.loginUser({
-           username: loginResponse.data.user.username,
-           email: loginResponse.data.user.email,
-           id: loginResponse.data.user.id,
-         });
+    if (username && password && email) {
+      try {
+        setLoading(true);
+        const registerResponse = await apiClient.post("/api/auth/register", {
+          username,
+          password,
+          email,
+        });
 
-         toast.success("Account Created Successfully!");
-         setLoading(false);
-         navigate("/");
-       } catch (error) {
-         console.error(error);
-       } finally {
-         setLoading(false);
-       }
+        if (registerResponse.data.success && registerResponse.data.data) {
+          const { user, token } = registerResponse.data.data;
+          loginStore.loginUser(
+            {
+              username: user.username,
+              email: user.email,
+              id: user.id,
+            },
+            token
+          );
+
+          toast.success("Account Created Successfully!");
+          navigate("/");
+        } else {
+          toast.error(registerResponse.data.message || "Registration failed");
+        }
+      } catch (error: any) {
+        console.error(error);
+        if (error.response) {
+          const errorMessage =
+            error.response.data?.message || "Registration failed";
+          toast.error(errorMessage);
+        } else {
+          toast.error("An unexpected error occurred.");
+        }
+      } finally {
+        setLoading(false);
+      }
     } else {
-      toast.warning("Input Fields Cannot be empty")
-      
+      toast.warning("Input Fields Cannot be empty");
     }
-   
   };
   return (
-    <div className="flex flex-col items-center gap-32">
+    <div className="flex flex-col items-center justify-center min-h-[80vh] gap-8">
       <MainLogo />
-      <div className="flex justify-center items-center flex-col gap-4 ">
-        <InputComponent
-          inputLabel="Email Id"
-          inputType="email"
-          onChange={handleEmailId}
-          placeholder="john@gmail.com"
-        />
-        <InputComponent
-          inputLabel="Username"
-          inputType="text"
-          onChange={handleUsername}
-          placeholder={"John Doe"}
-        />
-        <InputComponent
-          inputLabel="Password"
-          inputType="password"
-          onChange={handlePassword}
-          placeholder="********"
-        />
-        <button
-          className="bg-[#B6CCD7] text-black text-sm text-center p-2 rounded w-4/5 "
-          onClick={signupButtonHandler}
-          disabled={loading} 
-        >
-          {loading ? "Signing up..." : "Sign Up"}
-        </button>
-        <div className="flex text-sm items-center">
-          <p>
-            already have an account ?{" "}
-            <Link to="/login" className="text-blue-500">
-              Login
-            </Link>
-          </p>
+      <div className="w-full max-w-md border border-border rounded-lg p-8 bg-card shadow-sm">
+        <h1 className="text-2xl font-bold mb-6 text-center">Create Account</h1>
+        <div className="flex flex-col gap-4">
+          <InputComponent
+            inputLabel="Email"
+            inputType="email"
+            onChange={handleEmailId}
+            placeholder="john@gmail.com"
+          />
+          <InputComponent
+            inputLabel="Username"
+            inputType="text"
+            onChange={handleUsername}
+            placeholder="John Doe"
+          />
+          <InputComponent
+            inputLabel="Password"
+            inputType="password"
+            onChange={handlePassword}
+            placeholder="********"
+          />
+          <button
+            className="bg-primary text-primary-foreground text-center p-4 rounded-lg w-full font-semibold transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={signupButtonHandler}
+            disabled={loading}
+          >
+            {loading ? "Signing up..." : "Sign Up"}
+          </button>
+          <div className="flex text-sm items-center justify-center mt-2">
+            <p className="text-muted-foreground">
+              Already have an account?{" "}
+              <Link to="/login" className="text-primary hover:underline font-medium">
+                Login
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>

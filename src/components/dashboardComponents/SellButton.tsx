@@ -10,8 +10,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
-import useStore from "@/store/userStore";
+import apiClient from "@/lib/api";
+import { toast } from "react-toastify";
 
 interface SellButtonProps {
   symbolName: string;
@@ -22,65 +22,100 @@ interface SellButtonProps {
 
 const SellButton: FC<SellButtonProps> = ({
   symbolName,
-  symbolPrice,
   quantity,
   currentPrice,
 }) => {
   const [sellQuantity, setSellQuantity] = useState<number>(0);
-  const userStore = useStore();
+
+  // Ensure currentPrice is a number
+  const safeCurrentPrice = typeof currentPrice === 'number' && !isNaN(currentPrice)
+    ? currentPrice
+    : 0;
+
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuantity = parseInt(event.target.value, 10);
-    setSellQuantity(isNaN(newQuantity) || newQuantity < 1 ? 1 : newQuantity);
+    const newQuantity = parseFloat(event.target.value);
+    setSellQuantity(isNaN(newQuantity) || newQuantity <= 0 ? 0 : newQuantity);
   };
+
   const estimatedPrice =
-    symbolPrice !== undefined ? symbolPrice * sellQuantity : 0;
+    safeCurrentPrice > 0 ? safeCurrentPrice * sellQuantity : 0;
+
   const handleSellFunction = async () => {
+    if (sellQuantity <= 0) {
+      toast.warning("Please enter a valid quantity");
+      return;
+    }
+
+    if (sellQuantity > quantity) {
+      toast.error("Cannot sell more than you own");
+      return;
+    }
+
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_SERVER_URL}/api/pt/sellSymbol`,
-        {
-          userId: userStore.user?.id,
-          symbolName: symbolName,
-          quantity: sellQuantity,
-          sellingPrice: parseFloat(currentPrice as unknown as string),
-        }
-      );
-      console.log(res);
-    } catch (error: unknown) {
+      const response = await apiClient.post("/api/portfolio/sell", {
+        symbolName: symbolName,
+        quantity: sellQuantity,
+      });
+
+      if (response.data.success) {
+        toast.success("Symbol sold successfully!");
+        setSellQuantity(0);
+        // Refresh the page or trigger portfolio refresh
+        window.location.reload();
+      } else {
+        toast.error(response.data.message || "Sale failed");
+      }
+    } catch (error: any) {
       console.error("ERROR:", error);
+      const errorMessage =
+        error.response?.data?.message || "Failed to sell symbol";
+      toast.error(errorMessage);
     }
   };
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"default"}>Sell</Button>
+        <Button variant={"default"} className="bg-sell hover:bg-sell-hover text-sell-foreground">Sell</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] ">
         <DialogHeader>
           <DialogTitle>Fill the data </DialogTitle>
         </DialogHeader>
-        <div className="py-4 ">
-          <div className="items-center">
-            <p>Symbol : {symbolName}</p>
-            {symbolPrice !== null && <p>Current Price : {symbolPrice}</p>}
-            <p>Quantity Availbale to trade : {quantity}</p>
+        <div className="py-4 space-y-4">
+          <div className="space-y-2">
+            <p className="font-semibold">Symbol: {symbolName}</p>
+            {safeCurrentPrice > 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Current Price: ₹{safeCurrentPrice.toFixed(2)}
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">Loading price...</p>
+            )}
+            <p className="text-sm text-muted-foreground">
+              Available to sell: {quantity} units
+            </p>
           </div>
-          <div className="items-center">
-            <Label htmlFor="qty" className="text-right">
-              Quantity to sell:
-            </Label>
+          <div className="space-y-2">
+            <Label htmlFor="qty">Quantity to sell:</Label>
             <Input
-              type="text"
+              type="number"
               id="qty"
-              className=""
-              value={sellQuantity}
+              step="any"
+              min="0"
+              max={quantity}
+              value={sellQuantity || ""}
               onChange={handleQuantityChange}
+              placeholder="Enter quantity"
             />
           </div>
-          <p>Estimated Price : {estimatedPrice}</p>
+          <div className="p-3 bg-muted rounded-lg">
+            <p className="text-sm font-semibold">
+              Estimated Revenue: ₹{estimatedPrice.toFixed(2)}
+            </p>
+          </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleSellFunction}>
+          <Button type="submit" onClick={handleSellFunction} className="bg-sell hover:bg-sell-hover text-sell-foreground">
             Sell
           </Button>
         </DialogFooter>

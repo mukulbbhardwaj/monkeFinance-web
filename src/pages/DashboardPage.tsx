@@ -4,6 +4,8 @@ import useStore from "@/store/userStore";
 import PortfolioQuickView from "@/components/dashboardComponents/PortfolioQuickView";
 import HoldingsItem from "@/components/dashboardComponents/HoldingsItem";
 import SymbolSearch from "@/components/dashboardComponents/SymbolSearch";
+import TransactionsSection from "@/components/dashboardComponents/TransactionsSection";
+import WatchlistSection from "@/components/dashboardComponents/WatchlistSection";
 import getPortfolioInfo from "@/api/getPortfolioInfo";
 import { Loader2 } from "lucide-react";
 
@@ -16,11 +18,30 @@ type SymbolOwned = {
   symbolName: string;
 };
 
+type HoldingBreakdown = {
+  symbolName: string;
+  quantity: number;
+  averagePrice: number;
+  currentPrice: number;
+  currentValue: number;
+  unrealizedPnL: number;
+  unrealizedPnLPercent: number;
+};
+
 type PortfolioData = {
   portfolioId: number;
   symbolsOwned: SymbolOwned[];
   totalAmount: number;
+  initialAmount: number;
+  currentValue: number;
+  totalReturn: number;
+  totalReturnPercent: number;
   userId: number;
+  breakdown?: {
+    cash: number;
+    holdings: HoldingBreakdown[];
+    totalHoldingsValue: number;
+  };
 };
 
 const DashboardPage: FC<DashboardPageProps> = () => {
@@ -34,25 +55,9 @@ const DashboardPage: FC<DashboardPageProps> = () => {
       try {
         setIsLoading(true);
         setError(null);
-        
-        // Try to get user from store first
-        let userId = userStore.user?.id;
-        
-        // Fallback to localStorage if store doesn't have user
-        if (!userId) {
-          const userString = localStorage.getItem("User");
-          if (userString) {
-            try {
-              const user = JSON.parse(userString);
-              userId = user?.state?.user?.id;
-            } catch (parseError) {
-              console.error("Failed to parse user from localStorage:", parseError);
-            }
-          }
-        }
 
-        if (userId) {
-          const data = await getPortfolioInfo(userId);
+        if (userStore.user) {
+          const data = await getPortfolioInfo();
           setPortfolioInfo(data);
         } else {
           setError("User not found. Please log in.");
@@ -65,7 +70,9 @@ const DashboardPage: FC<DashboardPageProps> = () => {
       }
     };
 
-    fetchPortfolioData();
+    if (userStore.user) {
+      fetchPortfolioData();
+    }
   }, [userStore.user?.id]);
 
   if (isLoading) {
@@ -92,49 +99,52 @@ const DashboardPage: FC<DashboardPageProps> = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col mt-8 gap-6 lg:flex-row lg:justify-around lg:items-start">
-        <div className="flex-1 max-w-2xl">
-          <div className="border border-border rounded-lg p-4 mb-6 bg-card">
-            <h2 className="text-lg font-semibold mb-1">
-              Welcome back, {userStore.user?.username || "User"}!
-            </h2>
-            <p className="text-sm text-muted-foreground">
-              Here's your portfolio overview
-            </p>
-          </div>
-          
-          <PortfolioQuickView
-            investedAmount={portfolioInfo?.totalAmount || 0}
-            currentAmount={portfolioInfo?.totalAmount || 0}
-            totalAmount={portfolioInfo?.totalAmount || 0}
-            symbols={portfolioInfo?.symbolsOwned || []}
-          />
-          
-          <div className="mt-6">
+      <div className="flex flex-col mt-8 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Left Column - Portfolio and Search */}
+          <div className="lg:col-span-2 space-y-6">
+            <PortfolioQuickView
+              currentValue={portfolioInfo?.currentValue || 0}
+              totalAmount={portfolioInfo?.totalAmount || 0}
+              initialAmount={portfolioInfo?.initialAmount || 0}
+              totalReturn={portfolioInfo?.totalReturn || 0}
+              totalReturnPercent={portfolioInfo?.totalReturnPercent || 0}
+            />
+            
             <SymbolSearch />
+            
+            <TransactionsSection />
           </div>
-        </div>
-        
-        <div className="lg:w-96 lg:ml-8">
-          <h1 className="text-2xl font-bold mb-4 p-4 lg:pt-0">Your Holdings</h1>
-          {portfolioInfo?.symbolsOwned && portfolioInfo.symbolsOwned.length > 0 ? (
-            <div className="space-y-3">
-              {portfolioInfo.symbolsOwned.map((symbol) => (
-                <HoldingsItem
-                  key={symbol.symbolName}
-                  symbolName={symbol.symbolName}
-                  avgBuyPrice={symbol.averagePrice}
-                  quantity={symbol.quantity}
-                />
-              ))}
+          
+          {/* Right Column - Holdings and Watchlist */}
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-2xl font-bold mb-4">Your Holdings</h1>
+              {portfolioInfo?.breakdown?.holdings && portfolioInfo.breakdown.holdings.length > 0 ? (
+                <div className="space-y-3">
+                  {portfolioInfo.breakdown.holdings.map((holding) => (
+                    <HoldingsItem
+                      key={holding.symbolName}
+                      symbolName={holding.symbolName}
+                      avgBuyPrice={holding.averagePrice}
+                      quantity={holding.quantity}
+                      currentPrice={holding.currentPrice}
+                      unrealizedPnL={holding.unrealizedPnL}
+                      unrealizedPnLPercent={holding.unrealizedPnLPercent}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="border border-border rounded-lg p-8 text-center bg-card">
+                  <p className="text-muted-foreground">
+                    No holdings yet. Start by searching and buying a symbol!
+                  </p>
+                </div>
+              )}
             </div>
-          ) : (
-            <div className="border border-border rounded-lg p-8 text-center bg-card">
-              <p className="text-muted-foreground">
-                No holdings yet. Start by searching and buying a symbol!
-              </p>
-            </div>
-          )}
+            
+            <WatchlistSection />
+          </div>
         </div>
       </div>
     </Layout>

@@ -29,7 +29,7 @@ const Header: FC<HeaderProps> = () => {
   const handleLogOut = () => {
     userStore.logoutUser();
     toast.info("Logged Out");
-    navigate("/");
+    navigate("/login");
   };
   return (
     <header className="flex items-center justify-between py-4 border-b border-border mb-6">

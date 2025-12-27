@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { FC, useState } from "react";
 import {
   Dialog,
@@ -9,8 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import axios from "axios";
-import useStore from "@/store/userStore";
+import apiClient from "@/lib/api";
 import InputComponent from "../miscComponents/InputComponent";
 import { toast } from "react-toastify";
 
@@ -25,58 +23,163 @@ const BuyButton: FC<BuyButtonProps> = ({
   symbolName,
   symbolPrice,
   btnTitle,
-  quantity,
 }) => {
-  const [inputQuantity, setInputQuantity] = useState<number>(0);
-  const userStore = useStore();
+  const [inputQuantity, setInputQuantity] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>("");
+  const [buyByValue, setBuyByValue] = useState<boolean>(false);
+
+  // Ensure symbolPrice is a number
+  const safeSymbolPrice = typeof symbolPrice === 'number' && !isNaN(symbolPrice) 
+    ? symbolPrice 
+    : 0;
+
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newQuantity = parseInt(event.target.value, 10);
-    setInputQuantity(isNaN(newQuantity) || newQuantity < 1 ? 1 : newQuantity);
+    const value = event.target.value;
+    // Allow empty string, numbers, and decimal points
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setInputQuantity(value);
+    }
   };
-  const estimatedPrice =
-    symbolPrice !== undefined ? symbolPrice * inputQuantity : 0;
+
+  const handleValueChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    // Allow empty string, numbers, and decimal points
+    if (value === "" || /^\d*\.?\d*$/.test(value)) {
+      setInputValue(value);
+    }
+  };
+
+  const quantityNum = parseFloat(inputQuantity) || 0;
+  const valueNum = parseFloat(inputValue) || 0;
+
+  const estimatedPrice = buyByValue
+    ? valueNum
+    : safeSymbolPrice > 0
+    ? safeSymbolPrice * quantityNum
+    : 0;
+
   const handleBuyFunction = async () => {
+    if (buyByValue && valueNum <= 0) {
+      toast.warning("Please enter a valid amount to invest");
+      return;
+    }
+    if (!buyByValue && quantityNum <= 0) {
+      toast.warning("Please enter a valid quantity");
+      return;
+    }
+
     try {
-      await axios.post(`${import.meta.env.VITE_SERVER_URL}/api/pt/addSymbol`, {
-        userId: userStore.user?.id,
-        symbolName: symbolName,
-        quantity: inputQuantity,
-        averagePrice: parseFloat(symbolPrice as unknown as string),
-      });
-      toast.success("Transfer Success : Buy");
+      const requestBody = buyByValue
+        ? {
+            symbolName: symbolName,
+            value: valueNum,
+          }
+        : {
+            symbolName: symbolName,
+            quantity: quantityNum,
+          };
+
+      const response = await apiClient.post("/api/portfolio/buy", requestBody);
+
+      if (response.data.success) {
+        toast.success("Symbol purchased successfully!");
+        // Reset form
+        setInputQuantity("");
+        setInputValue("");
+        // Refresh the page or trigger portfolio refresh
+        window.location.reload();
+      } else {
+        toast.error(response.data.message || "Purchase failed");
+      }
     } catch (error: any) {
       console.error("ERROR:", error);
-      toast.error(`${error?.response.data.message}`)
+      const errorMessage =
+        error.response?.data?.message || "Failed to purchase symbol";
+      toast.error(errorMessage);
     }
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant={"default"}>{btnTitle}</Button>
+        <Button variant={"default"} className="bg-buy hover:bg-buy-hover text-buy-foreground">{btnTitle}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Fill the data </DialogTitle>
         </DialogHeader>
-        <div className="py-4">
-          <div className="items-center gap-4">
-            <p>Symbol: {symbolName}</p>
-            {symbolPrice !== null && <p>Current Price: {symbolPrice}</p>}
-            <p>Quantity:{quantity}</p>
+        <div className="py-4 space-y-4">
+          <div className="space-y-2">
+            <p className="font-semibold">Symbol: {symbolName}</p>
+            {safeSymbolPrice > 0 ? (
+              <p className="text-sm text-muted-foreground">
+                Current Price: ₹{safeSymbolPrice.toFixed(2)}
+              </p>
+            ) : (
+              <p className="text-sm text-muted-foreground">Loading price...</p>
+            )}
           </div>
-          <div className="w-1/2">
-            <InputComponent
-              inputLabel="Quantities to buy"
-              inputType="number"
-              placeholder=""
-              onChange={handleQuantityChange}
-            />
+
+          <div className="flex gap-2 mb-4">
+            <Button
+              variant={!buyByValue ? "default" : "outline"}
+              onClick={() => setBuyByValue(false)}
+              className="flex-1"
+            >
+              Buy by Quantity
+            </Button>
+            <Button
+              variant={buyByValue ? "default" : "outline"}
+              onClick={() => setBuyByValue(true)}
+              className="flex-1"
+            >
+              Buy by Value
+            </Button>
           </div>
-          <p>Estimated Price : {estimatedPrice}</p>
+
+          {buyByValue ? (
+            <div>
+              <InputComponent
+                inputLabel="Amount to invest (₹)"
+                inputType="number"
+                placeholder="Enter amount"
+                onChange={handleValueChange}
+                value={inputValue}
+                step="0.01"
+                min="0"
+              />
+              <p className="text-sm text-muted-foreground mt-2">
+                Estimated Quantity:{" "}
+                {safeSymbolPrice > 0 && valueNum > 0
+                  ? (valueNum / safeSymbolPrice).toFixed(8)
+                  : "0"}
+              </p>
+            </div>
+          ) : (
+            <div>
+              <InputComponent
+                inputLabel="Quantity to buy"
+                inputType="number"
+                placeholder="Enter quantity (e.g., 0.1)"
+                onChange={handleQuantityChange}
+                value={inputQuantity}
+                step="any"
+                min="0"
+              />
+              <p className="text-sm text-muted-foreground mt-2">
+                Supports decimal values (e.g., 0.1, 0.001)
+              </p>
+            </div>
+          )}
+
+          <div className="p-3 bg-muted rounded-lg">
+            <p className="text-sm font-semibold">
+              Estimated Cost: ₹{estimatedPrice.toFixed(2)}
+            </p>
+          </div>
         </div>
         <DialogFooter>
-          <Button type="submit" onClick={handleBuyFunction}>
+          <Button type="submit" onClick={handleBuyFunction} className="bg-buy hover:bg-buy-hover text-buy-foreground">
             Buy
           </Button>
         </DialogFooter>

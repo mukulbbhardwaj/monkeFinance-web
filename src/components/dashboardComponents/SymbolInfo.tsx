@@ -30,6 +30,16 @@ const SymbolInfo: FC<SymbolInfoProps> = ({
   currentPrice,
   returns,
 }) => {
+  // Ensure currentPrice is a number
+  const safeCurrentPrice = typeof currentPrice === 'number' && !isNaN(currentPrice) 
+    ? currentPrice 
+    : 0;
+  
+  // Ensure avgBuyPrice is a number
+  const safeAvgBuyPrice = typeof avgBuyPrice === 'number' && !isNaN(avgBuyPrice)
+    ? avgBuyPrice
+    : 0;
+
   return (
     <Drawer>
       <DrawerTrigger className="cursor-pointer">{children}</DrawerTrigger>
@@ -43,16 +53,18 @@ const SymbolInfo: FC<SymbolInfoProps> = ({
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Average Buying Price</p>
-              <p className="text-lg font-semibold">₹{avgBuyPrice.toFixed(2)}</p>
+              <p className="text-lg font-semibold">₹{safeAvgBuyPrice.toFixed(2)}</p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Current Price</p>
-              <p className="text-lg font-semibold">₹{currentPrice.toFixed(2)}</p>
+              <p className="text-lg font-semibold">
+                {safeCurrentPrice > 0 ? `₹${safeCurrentPrice.toFixed(2)}` : 'Loading...'}
+              </p>
             </div>
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Total Returns</p>
-              <p className={`text-lg font-semibold ${typeof returns === 'number' && returns >= 0 ? 'text-green-500' : 'text-red-500'}`}>
-                ₹{typeof returns === 'number' ? returns.toFixed(2) : returns}
+              <p className={`text-lg font-bold ${typeof returns === 'number' && returns >= 0 ? 'text-profit' : 'text-loss'}`}>
+                {typeof returns === 'number' && !isNaN(returns) && returns >= 0 ? '+' : ''}₹{typeof returns === 'number' && !isNaN(returns) ? Math.abs(returns).toFixed(2) : (returns || '0.00')}
               </p>
             </div>
           </div>
@@ -67,8 +79,8 @@ const SymbolInfo: FC<SymbolInfoProps> = ({
             />
             <SellButton
               symbolName={symbolName}
-              symbolPrice={avgBuyPrice}
-              currentPrice={currentPrice}
+              symbolPrice={safeAvgBuyPrice}
+              currentPrice={safeCurrentPrice}
               quantity={quantity}
             />
           </div>
