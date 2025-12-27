@@ -22,6 +22,7 @@ export const theme = {
       input: "hsl(var(--input))",
       ring: "hsl(var(--ring))",
       background: "hsl(var(--background))",
+      "secondary-bg": "hsl(var(--secondary-background))",
       foreground: "hsl(var(--foreground))",
       green: "#00FF00",
       red: "#FF0000",
@@ -58,7 +59,7 @@ export const theme = {
     borderRadius: {
       lg: "18px",
       md: "14px",
-      sm: "10",
+      sm: "10px",
     },
     keyframes: {
       "accordion-down": {

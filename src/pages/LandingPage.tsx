@@ -7,7 +7,7 @@ interface LandingPageProps {}
 
 const exploreItems: { title: string; url: string; color: string }[] = [
   {
-    title: " Start Paper Trading",
+    title: "Start Paper Trading",
     url: "/dashboard",
     color: "bg-[#e38786]",
   },
@@ -36,59 +36,66 @@ const featureItems: { heading: string; desc: string }[] = [
 
 const LandingPage: FC<LandingPageProps> = () => {
   return (
-    <>
-      <Layout>
-        <div className="flex flex-col">
-          <div className="flex justify-between align-center items-center mb-4">
-            <div className=" lg:w-1/2">
-              <h1 className="text-4xl leading-tight font-bold mb-4 mt-8">
-                Decode Finance.
-                <br /> Trade Virtually.
-                <br /> Learn Money.
-              </h1>
-              <p className="text-sm ml-1 text-secondary-foreground ">
-                - Uncover financial secrets, practice in a virtual environment,
-                and master managing finances. Simplifying finance, one trade at
-                a time.
-              </p>
-            </div>
+    <Layout>
+      <div className="flex flex-col">
+        {/* Hero Section */}
+        <div className="flex flex-col lg:flex-row justify-between items-center mb-12 lg:mb-16 gap-8">
+          <div className="lg:w-1/2 space-y-6">
+            <h1 className="text-5xl lg:text-6xl leading-tight font-bold mb-4 mt-8 bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent">
+              Decode Finance.
+              <br /> Trade Virtually.
+              <br /> Learn Money.
+            </h1>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Uncover financial secrets, practice in a virtual environment,
+              and master managing finances. Simplifying finance, one trade at
+              a time.
+            </p>
+          </div>
+          <div className="lg:w-1/2 flex justify-center">
             <img
               src={heroBanner}
               alt="Hero Illustration"
-              className="w-96 mt-6 hidden lg:block"
+              className="w-full max-w-md lg:max-w-lg mt-6 hidden lg:block animate-fade-in"
             />
           </div>
+        </div>
 
-          <div className="my-8 ">
-            <h2 className="text-2xl font-bold mb-4">Explore</h2>
-            <div className="flex flex-col sm:flex-row items-center justify-center text-black ">
-              {exploreItems.map((item) => (
-                <div key={item.title}>
-                  <Link
-                    to={item.url}
-                    className={` ${item.color} mr-4 p-16 mb-4 font-lg border border-border w-64 h-32 flex justify-center items-center text-center font-bold rounded-3xl hover:bg-card-hovered hover:scale-105`}
-                  >
-                    {item.title}
-                  </Link>
-                </div>
-              ))}
-            </div>
+        {/* Explore Section */}
+        <div className="my-12 lg:my-16">
+          <h2 className="text-3xl font-bold mb-8">Explore</h2>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {exploreItems.map((item) => (
+              <Link
+                key={item.title}
+                to={item.url}
+                className={`${item.color} p-12 font-lg border border-border w-full sm:w-64 h-40 flex justify-center items-center text-center font-bold rounded-2xl transition-all duration-300 hover:scale-105 hover:shadow-lg hover:shadow-primary/20 text-black`}
+              >
+                {item.title}
+              </Link>
+            ))}
           </div>
+        </div>
 
-          <h2 className="text-2xl font-bold">What We Do</h2>
-          <div className="my-8 flex flex-col lg:flex-row ">
+        {/* Features Section */}
+        <div className="my-12 lg:my-16">
+          <h2 className="text-3xl font-bold mb-8">What We Do</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {featureItems.map((item) => (
-              <div key={item.heading} className="p-4 border rounded-xl m-1">
-                <h1 className="text-xl m-4">{item.heading}</h1>
-                <p className="text-sm text-secondary-foreground m-8">
+              <div 
+                key={item.heading} 
+                className="p-6 border border-border rounded-xl bg-card hover:bg-card-hovered transition-all duration-300 hover:shadow-md"
+              >
+                <h3 className="text-xl font-semibold mb-4">{item.heading}</h3>
+                <p className="text-muted-foreground leading-relaxed">
                   {item.desc}
                 </p>
               </div>
             ))}
           </div>
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 };
 

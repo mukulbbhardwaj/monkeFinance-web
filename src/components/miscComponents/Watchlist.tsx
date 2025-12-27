@@ -5,25 +5,24 @@ interface WatchlistProps {}
 
 const Watchlist: FC<WatchlistProps> = () => {
   return (
-    <div className="bg-secondary-bg">
-      {/* {console.log(symbols)} */}
-      <h1>Watchlist</h1>
-      <div>
-        <table>
+    <div className="bg-secondary-bg border border-border rounded-lg p-6">
+      <h1 className="text-xl font-semibold mb-4">Watchlist</h1>
+      <div className="overflow-x-auto">
+        <table className="w-full">
           <thead>
-            <tr>
-              <th>symbol</th>
-              <th>LTP</th>
+            <tr className="border-b border-border">
+              <th className="text-left p-2 text-muted-foreground">Symbol</th>
+              <th className="text-right p-2 text-muted-foreground">LTP</th>
             </tr>
           </thead>
-
-          {symbols.map((sym) => (
-            <tbody key={sym}>
-              <td>{sym}</td>
-              <td>LTP</td>
-            </tbody>
-          ))}
-          <tr></tr>
+          <tbody>
+            {symbols.map((sym) => (
+              <tr key={sym} className="border-b border-border hover:bg-card-hovered transition-colors">
+                <td className="p-2">{sym}</td>
+                <td className="p-2 text-right">LTP</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
     </div>

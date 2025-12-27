@@ -32,21 +32,23 @@ const Header: FC<HeaderProps> = () => {
     navigate("/");
   };
   return (
-    <div className="flex items-center justify-between content-center">
+    <header className="flex items-center justify-between py-4 border-b border-border mb-6">
       <div>
         <MainLogo />
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button>
-            <Menu />
+          <Button variant="ghost" size="icon" className="hover:bg-accent">
+            <Menu className="h-5 w-5" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56 text-white">
+        <DropdownMenuContent className="w-56" align="end">
           <DropdownMenuGroup>
-            {menus.map((menu, title) => (
-              <DropdownMenuItem key={title}>
-                <Link to={menu.href}>{menu.title}</Link>
+            {menus.map((menu) => (
+              <DropdownMenuItem key={menu.href} asChild>
+                <Link to={menu.href} className="cursor-pointer">
+                  {menu.title}
+                </Link>
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
@@ -55,33 +57,33 @@ const Header: FC<HeaderProps> = () => {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             {userStore.user ? (
               <>
-                <DropdownMenuItem>
-                  <Link to={`/dashboard`}>
+                <DropdownMenuItem asChild>
+                  <Link to="/dashboard" className="cursor-pointer">
                     Portfolio
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogOut}>
+                <DropdownMenuItem onClick={handleLogOut} className="cursor-pointer">
                   Log out
                 </DropdownMenuItem>
               </>
             ) : (
-              <DropdownMenuItem className="flex align-top">
-                <p>
-                  <Link to={"/login"} className="underline">
+              <DropdownMenuItem className="flex flex-col items-start gap-1">
+                <p className="text-sm text-muted-foreground">
+                  <Link to="/login" className="underline hover:text-foreground">
                     Login
-                  </Link>{" "}
-                  or{" "}
-                  <Link to={"/register"} className="underline">
-                    Register{" "}
                   </Link>
-                  to see your portfolio
+                  {" or "}
+                  <Link to="/register" className="underline hover:text-foreground">
+                    Register
+                  </Link>
+                  {" to see your portfolio"}
                 </p>
               </DropdownMenuItem>
             )}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
+    </header>
   );
 };
 

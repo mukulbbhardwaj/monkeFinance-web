@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { subscribeToSymbol } from "../../api/binance";
 import { Link } from "react-router-dom";
 import BuyButton from "./BuyButton";
@@ -24,77 +24,84 @@ const SymbolSearch = () => {
     setSearchSymbol(event.target.value);
   };
   const handleSymbolSearch = () => {
-    if (!searchSymbol) {
-      console.log("enter something");
-    } else {
+    if (!searchSymbol.trim()) {
+      return;
+    }
+    
+    if (currentWebSocket) {
+      currentWebSocket.close();
+    }
+    
+    const ws = subscribeToSymbol(searchSymbol.toUpperCase(), (data: BinanceTradeUpdate) => {
+      setLatestTrade(data);
+    });
+    setCurrentWebSocket(ws);
+  };
+
+  useEffect(() => {
+    return () => {
       if (currentWebSocket) {
         currentWebSocket.close();
       }
-      const ws = subscribeToSymbol(searchSymbol, (data: BinanceTradeUpdate) => {
-        setLatestTrade(data);
-      });
-      setCurrentWebSocket(ws);
-
-      return () => {
-        if (currentWebSocket) {
-          currentWebSocket.close();
-          setCurrentWebSocket(null);
-        }
-      };
-    }
-  };
+    };
+  }, [currentWebSocket]);
 
   return (
-    <div className="w-full bg-secondary-bg mt-2 border border-border rounded-lg ">
-      <div className="  ">
-        <div className="flex flex-col items-center p-4 ">
+    <div className="w-full bg-card mt-2 border border-border rounded-lg shadow-sm">
+      <div className="p-6">
+        <h2 className="text-lg font-semibold mb-4">Search Symbol</h2>
+        <div className="flex flex-col gap-4">
           <InputComponent
-            inputLabel="Search Symbol"
-            inputType="string"
+            inputLabel="Symbol"
+            inputType="text"
             onChange={handleSearchChange}
             placeholder="BTCUSDT"
           />
-          <Button onClick={handleSymbolSearch} className="w-1/ m-4">
+          <Button 
+            onClick={handleSymbolSearch} 
+            className="w-full"
+            disabled={!searchSymbol.trim()}
+          >
             Search
           </Button>
         </div>
       </div>
 
-      <div className="">
-        {latestTrade && (
-          <div className="p-4 flex justify-between align-center items-center">
-            <div>
-              <div className="flex flex-col">
-                <p className="text-secondary-foreground text-sm">Symbol:</p>
-                <p> {latestTrade.s}</p>
+      {latestTrade && (
+        <div className="border-t border-border p-6">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="space-y-2">
+              <div>
+                <p className="text-sm text-muted-foreground">Symbol</p>
+                <p className="text-lg font-semibold">{latestTrade.s}</p>
               </div>
-              <div className="flex flex-col">
-                {latestTrade.p !== undefined && (
-                  <>
-                    <p className="text-secondary-foreground text-sm">Price:</p>
-                    <p>{formatPrice(latestTrade.p)}</p>
-                  </>
-                )}
-              </div>
-              
+              {latestTrade.p !== undefined && (
+                <div>
+                  <p className="text-sm text-muted-foreground">Current Price</p>
+                  <p className="text-xl font-bold">₹{formatPrice(latestTrade.p)}</p>
+                </div>
+              )}
             </div>
-            <div className="pt-4 flex flex-col align-center items-center justify-center pb-4 gap-2">
+            
+            <div className="flex flex-col gap-2 w-full md:w-auto">
               <BuyButton
                 symbolName={latestTrade.s}
                 symbolPrice={latestTrade.p}
                 btnTitle="Buy"
               />
               <Link
-                to={`https://www.tradingview.com/chart/0VfM6SX8/?symbol=BINANCE%3A${searchSymbol}`}
+                to={`https://www.tradingview.com/chart/0VfM6SX8/?symbol=BINANCE%3A${searchSymbol.toUpperCase()}`}
                 target="_blank"
-                className=""
+                rel="noopener noreferrer"
               >
-                <button>See Chart</button>
+                <Button variant="outline" className="w-full">
+                  View Chart
+                </Button>
               </Link>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

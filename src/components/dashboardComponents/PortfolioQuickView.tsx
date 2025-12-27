@@ -1,14 +1,7 @@
-import { calculateInvestedAmount, formatPrice } from "@/lib/utils";
-
-import { FC } from "react";
+import { calculateInvestedAmount, formatPrice, type SymbolOwned } from "@/lib/utils";
+import { FC, useMemo } from "react";
 import InfoToolTip from "../miscComponents/InfoToolTip";
-
-interface SymbolOwned {
-  averagePrice: number;
-  portfolioId: number;
-  quantity: number;
-  symbolName: string;
-}
+import { TrendingUp, TrendingDown, Wallet } from "lucide-react";
 
 interface PortfolioQuickViewProps {
   currentAmount: number;
@@ -21,42 +14,67 @@ const PortfolioQuickView: FC<PortfolioQuickViewProps> = ({
   symbols,
   totalAmount,
 }) => {
-  const investedAmount = calculateInvestedAmount(symbols);
-  // const currentValue = calculateCurrentValue(symbols);
+  const investedAmount = useMemo(() => calculateInvestedAmount(symbols), [symbols]);
+  const totalReturns = totalAmount - investedAmount;
+  const returnPercentage = investedAmount > 0 
+    ? ((totalReturns / investedAmount) * 100).toFixed(2)
+    : "0.00";
 
   return (
-   
-    <div className="flex justify-center flex-col border border-border rounded-lg w-full bg-secondary-bg p-4">
-      <h1 className="text-sm">Your Portfolio</h1>
-      <div className="flex justify-between m-4 ">
-        <div className="flex flex-col lg:w-64">
-          <div className="lg:p-4">
-            <h1 className="text-secondary-foreground text-sm flex gap-1 items-center ">
-              Current
+    <div className="flex flex-col border border-border rounded-lg w-full bg-card p-6 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex items-center gap-2 mb-6">
+        <Wallet className="h-5 w-5 text-primary" />
+        <h1 className="text-xl font-semibold">Your Portfolio</h1>
+      </div>
+      
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm text-muted-foreground flex items-center gap-1">
+              Current Balance
               <InfoToolTip description="Current Amount in Your Account" />
-            </h1>
-            <h2 className="text-heading text-lg">
-              ₹{formatPrice(totalAmount)}
-              {/* {currentValue} */}
             </h2>
           </div>
-          <div className="lg:p-4">
-            <h1 className="text-secondary-foreground text-sm flex gap-1 items-center">
-              Invested{" "}
+          <p className="text-2xl font-bold">
+            ₹{formatPrice(totalAmount)}
+          </p>
+        </div>
+        
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm text-muted-foreground flex items-center gap-1">
+              Invested
               <InfoToolTip description="Total Amount Invested in the Market" />
-            </h1>
-            <h2 className="text-heading text-lg">
-              ₹{formatPrice(investedAmount)}
             </h2>
+          </div>
+          <p className="text-2xl font-bold">
+            ₹{formatPrice(investedAmount)}
+          </p>
+        </div>
+        
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm text-muted-foreground flex items-center gap-1">
+              Total Returns
+              <InfoToolTip description="Total Returns on Invested Amount" />
+            </h2>
+          </div>
+          <div className="flex items-center gap-2">
+            {totalReturns >= 0 ? (
+              <TrendingUp className="h-5 w-5 text-green-500" />
+            ) : (
+              <TrendingDown className="h-5 w-5 text-red-500" />
+            )}
+            <div>
+              <p className={`text-2xl font-bold ${totalReturns >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                ₹{formatPrice(Math.abs(totalReturns))}
+              </p>
+              <p className={`text-xs ${totalReturns >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+                {totalReturns >= 0 ? '+' : ''}{returnPercentage}%
+              </p>
+            </div>
           </div>
         </div>
-        {/* <div className="lg:p-4">
-          <h1 className="text-secondary-foreground text-sm flex items-center gap-1">
-            Total Returns{" "}
-            <InfoToolTip description="Total Returns on Invested Amount" />
-          </h1>
-          <h2 className="text-green text-lg">₹{totalReturns}</h2>
-        </div> */}
       </div>
     </div>
   );

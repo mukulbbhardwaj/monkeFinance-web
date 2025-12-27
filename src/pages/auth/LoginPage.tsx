@@ -11,7 +11,6 @@ interface LoginPageProps {}
 const LoginPage: FC<LoginPageProps> = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const loginStore = useStore();
@@ -22,9 +21,7 @@ const LoginPage: FC<LoginPageProps> = () => {
   const handlePassword = (event: ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
-  const handleEmail = (event: ChangeEvent<HTMLInputElement>) => {
-    setEmail(event.target.value);
-  };
+  
   const loginButtonHandler = async () => {
     if (username && password) {
       try {
@@ -33,13 +30,12 @@ const LoginPage: FC<LoginPageProps> = () => {
           `${import.meta.env.VITE_SERVER_URL}/api/user/login`,
           {
             username,
-            email,
             password,
           }
         );
         loginStore.loginUser({
           username: username,
-          email: email,
+          email: response.data.user.email || "",
           id: response.data.user.id,
         });
         toast.success(`Hi! ${username}`);
@@ -69,35 +65,38 @@ const LoginPage: FC<LoginPageProps> = () => {
   };
 
   return (
-    <div className="flex flex-col items-center gap-32">
+    <div className="flex flex-col items-center justify-center min-h-[80vh] gap-8">
       <MainLogo />
-      <div className="flex justify-center items-center flex-col gap-4 ">
-        <InputComponent
-          inputLabel="Username"
-          inputType="text"
-          onChange={handleUsername || handleEmail}
-          placeholder={"John Doe"}
-        />
-        <InputComponent
-          inputLabel="Password"
-          inputType="password"
-          onChange={handlePassword}
-          placeholder="********"
-        />
-        <button
-          className="bg-[#B6CCD7] text-black text-center p-4 rounded-xl w-4/5  "
-          onClick={loginButtonHandler}
-          disabled={loading}
-        >
-          {loading ? "Logging In..." : "Login"}
-        </button>
-        <div className="flex text-sm items-center">
-          <p>
-            don't have an account yet?{" "}
-            <Link to="/register" className="text-blue-500">
-              Sign up
-            </Link>
-          </p>
+      <div className="w-full max-w-md border border-border rounded-lg p-8 bg-card shadow-sm">
+        <h1 className="text-2xl font-bold mb-6 text-center">Welcome Back</h1>
+        <div className="flex flex-col gap-4">
+          <InputComponent
+            inputLabel="Username"
+            inputType="text"
+            onChange={handleUsername}
+            placeholder="John Doe"
+          />
+          <InputComponent
+            inputLabel="Password"
+            inputType="password"
+            onChange={handlePassword}
+            placeholder="********"
+          />
+          <button
+            className="bg-primary text-primary-foreground text-center p-4 rounded-lg w-full font-semibold transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={loginButtonHandler}
+            disabled={loading}
+          >
+            {loading ? "Logging In..." : "Login"}
+          </button>
+          <div className="flex text-sm items-center justify-center mt-2">
+            <p className="text-muted-foreground">
+              Don't have an account yet?{" "}
+              <Link to="/register" className="text-primary hover:underline font-medium">
+                Sign up
+              </Link>
+            </p>
+          </div>
         </div>
       </div>
     </div>
